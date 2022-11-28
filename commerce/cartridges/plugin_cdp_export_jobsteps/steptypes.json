@@ -1,0 +1,127 @@
+{
+    "step-types": {
+      "script-module-step": [
+        {
+          "@type-id": "custom.UploadCsvToSalesforce",
+          "module": "plugin_cdp_export_jobsteps/cartridge/scripts/steps/UploadCsvToSalesforce.js",
+          "description": "Upload csv file to a Salesforce core instance",
+          "function": "execute",
+          "timeout-in-seconds":"900",
+          "parameters": {
+            "parameter": [
+                {
+                    "@name":"FileName",
+                    "@type":"string",
+                    "@required":"true",
+                    "description":"CSV file to be uploaded."
+                },
+                {
+                  "@name":"OrgUrl",
+                  "@type":"string",
+                  "@required":"true",
+                  "description":"OrgUrl"
+                },
+                {
+                  "@name":"Username",
+                  "@type":"string",
+                  "@required":"true",
+                  "description":"Username"
+                },
+                {
+                  "@name":"Password",
+                  "@type":"string",
+                  "@required":"true",
+                  "description":"Password"
+                },
+                {
+                  "@name":"ConsumerKey",
+                  "@type":"string",
+                  "@required":"true",
+                  "description":"ConsumerKey"
+                },
+                {
+                  "@name":"ConsumerSecret",
+                  "@type":"string",
+                  "@required":"true",
+                  "description":"ConsumerSecret"
+                }
+            ]
+          },
+          "status-codes": {
+            "status": [
+              {
+                "@code": "ERROR",
+                "description": "Used when an error occurred."
+              },
+              {
+                "@code": "OK",
+                "description": "Used when everything went well."
+              }
+            ]
+          }
+        },
+        {
+          "@type-id": "custom.CustomersXmlToCsv",
+          "module": "plugin_cdp_export_jobsteps/cartridge/scripts/steps/CustomersXmlToCsv.js",
+          "description": "Convert customers data from xml to json",
+          "function": "execute",
+          "timeout-in-seconds":"900",
+          "parameters": {
+            "parameter": [
+                {
+                    "@name":"FileName",
+                    "@type":"string",
+                    "@required":"true",
+                    "description":"Customers xml file exported."
+                },
+                {
+                    "@name":"SeparatorCharacter",
+                    "@type":"string",
+                    "@required":"true",
+                    "@trim":"false",
+                    "description":"Separator character to compose the csv file",
+                    "enum-values":
+                    {
+                      "value":
+                      [
+                        ";",
+                        ","
+                      ]
+                    }
+                },
+                {
+                  "@name":"ProfileFileds",
+                  "@type":"string",
+                  "@required":"true",
+                  "description":"Fields that will be captured form the customer xml file separated by comma."
+                },
+                {
+                  "@name":"CustomFields",
+                  "@type":"string",
+                  "@required":"true",
+                  "description":"Custom fields that will be captured form the customer xml file separated by comma."
+                },
+                {
+                  "@name":"AddressFields",
+                  "@type":"string",
+                  "@required":"true",
+                  "description":"Address fields that will be captured form the customer xml file separated by comma."
+                }
+            ]
+          },
+          "status-codes": {
+            "status": [
+              {
+                "@code": "ERROR",
+                "description": "Used when an error occurred."
+              },
+              {
+                "@code": "OK",
+                "description": "Used when everything went well."
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
