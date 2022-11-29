@@ -9,7 +9,7 @@ const FileUtils = require('../util/FileUtils');
 
 function execute(parameters, stepExecution) {
     try {
-        uploadCsvFileToSalesforce(parameters);
+        //uploadCsvFileToSalesforce(parameters);
     } catch (error) {
       Logger.error('An error has occurred: {0}', error.toString());
       return new Status(Status.ERROR, 'ERROR', error.toString());

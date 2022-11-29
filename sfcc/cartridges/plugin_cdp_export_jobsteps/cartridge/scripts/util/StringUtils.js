@@ -15,3 +15,8 @@ exports.uuidv4 = function() {
         return (c === 'x' ? r : (r & 0x3 | 0x8)).toString(16);
     });
 }
+
+exports.fix = function(data) {
+    var str = String(data);
+    return str.replace(/([^;])\n/g, '$1 ');
+}

@@ -121,6 +121,35 @@
               }
             ]
           }
+        },
+        {
+          "@type-id": "custom.ProductsToCsv",
+          "module": "plugin_cdp_export_jobsteps/cartridge/scripts/steps/ProductsToCsv.js",
+          "description": "Get delta product list in csv file based on the last modified",
+          "function": "execute",
+          "timeout-in-seconds":"900",
+          "parameters": {
+            "parameter": [
+                {
+                    "@name":"FileName",
+                    "@type":"string",
+                    "@required":"true",
+                    "description":"Customers xml file exported."
+                }
+            ]
+          },
+          "status-codes": {
+            "status": [
+              {
+                "@code": "ERROR",
+                "description": "Used when an error occurred."
+              },
+              {
+                "@code": "OK",
+                "description": "Used when everything went well."
+              }
+            ]
+          }
         }
       ]
     }

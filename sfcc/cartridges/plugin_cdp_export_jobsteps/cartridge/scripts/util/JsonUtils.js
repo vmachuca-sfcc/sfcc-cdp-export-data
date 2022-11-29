@@ -12,3 +12,7 @@ exports.getCustomAttributeValue = function(obj, field) {
     });
     return value;
 }
+
+exports.isPrimitive = function(value) {
+    return value !== Object(value) && typeof value != "function";
+}

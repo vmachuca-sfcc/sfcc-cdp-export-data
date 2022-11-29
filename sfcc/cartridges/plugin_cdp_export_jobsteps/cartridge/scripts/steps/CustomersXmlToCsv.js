@@ -35,7 +35,7 @@ function createOutputFile(parameters) {
 
     //columns
     const cols = profileFields.concat(customFields).concat(addressFields);
-    csv.writeNext(cols.join(parameters.SeparatorCharacter));
+    csv.writeNext(cols);
 
     //rows
     while (xsr.hasNext()) {
@@ -83,7 +83,7 @@ function createOutputFile(parameters) {
                 );
             });
 
-            csv.writeNext(row.join(parameters.SeparatorCharacter));
+            csv.writeNext(row);
         }
     }
     csv.close();
