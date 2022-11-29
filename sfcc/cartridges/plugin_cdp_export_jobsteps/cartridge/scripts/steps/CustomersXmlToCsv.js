@@ -23,7 +23,7 @@ function execute(parameters, stepExecution) {
 }
 
 function createOutputFile(parameters) {
-    var inputFile = FileUtils.getFilePath(parameters.FileName, 'xml');
+    var inputFile = FileUtils.getRootFilePath(parameters.FileName, 'xml');
     var outputFile = FileUtils.getFilePath(parameters.FileName, 'csv');
     var profileFields = parameters.ProfileFileds.split(FileUtils.COMMA_CHAR);
     var customFields = parameters.CustomFields.split(FileUtils.COMMA_CHAR);

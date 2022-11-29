@@ -9,42 +9,42 @@
           "timeout-in-seconds":"900",
           "parameters": {
             "parameter": [
-                {
-                    "@name":"FileName",
-                    "@type":"string",
-                    "@required":"true",
-                    "description":"CSV file to be uploaded."
-                },
-                {
-                  "@name":"OrgUrl",
-                  "@type":"string",
-                  "@required":"true",
-                  "description":"OrgUrl"
-                },
-                {
-                  "@name":"Username",
-                  "@type":"string",
-                  "@required":"true",
-                  "description":"Username"
-                },
-                {
-                  "@name":"Password",
-                  "@type":"string",
-                  "@required":"true",
-                  "description":"Password"
-                },
-                {
-                  "@name":"ConsumerKey",
-                  "@type":"string",
-                  "@required":"true",
-                  "description":"ConsumerKey"
-                },
-                {
-                  "@name":"ConsumerSecret",
-                  "@type":"string",
-                  "@required":"true",
-                  "description":"ConsumerSecret"
-                }
+              {
+                "@name":"FileName",
+                "@type":"string",
+                "@required":"true",
+                "description":"CSV file to be uploaded."
+              },
+              {
+                "@name":"OrgUrl",
+                "@type":"string",
+                "@required":"true",
+                "description":"OrgUrl"
+              },
+              {
+                "@name":"Username",
+                "@type":"string",
+                "@required":"true",
+                "description":"Username"
+              },
+              {
+                "@name":"Password",
+                "@type":"string",
+                "@required":"true",
+                "description":"Password"
+              },
+              {
+                "@name":"ConsumerKey",
+                "@type":"string",
+                "@required":"true",
+                "description":"ConsumerKey"
+              },
+              {
+                "@name":"ConsumerSecret",
+                "@type":"string",
+                "@required":"true",
+                "description":"ConsumerSecret"
+              }
             ]
           },
           "status-codes": {
@@ -68,45 +68,36 @@
           "timeout-in-seconds":"900",
           "parameters": {
             "parameter": [
-                {
-                    "@name":"FileName",
-                    "@type":"string",
-                    "@required":"true",
-                    "description":"Customers xml file exported."
-                },
-                {
-                    "@name":"SeparatorCharacter",
-                    "@type":"string",
-                    "@required":"true",
-                    "@trim":"false",
-                    "description":"Separator character to compose the csv file",
-                    "enum-values":
-                    {
-                      "value":
-                      [
-                        ";",
-                        ","
-                      ]
-                    }
-                },
-                {
-                  "@name":"ProfileFileds",
-                  "@type":"string",
-                  "@required":"true",
-                  "description":"Fields that will be captured form the customer xml file separated by comma."
-                },
-                {
-                  "@name":"CustomFields",
-                  "@type":"string",
-                  "@required":"true",
-                  "description":"Custom fields that will be captured form the customer xml file separated by comma."
-                },
-                {
-                  "@name":"AddressFields",
-                  "@type":"string",
-                  "@required":"true",
-                  "description":"Address fields that will be captured form the customer xml file separated by comma."
-                }
+              {
+                "@name":"FileName",
+                "@type":"string",
+                "@required":"true",
+                "description":"Customers xml file exported."
+              },
+              {
+                "@name":"ProfileFileds",
+                "@type":"string",
+                "@required":"true",
+                "description":"Fields that will be captured form the customer xml file separated by comma."
+              },
+              {
+                "@name":"CustomFields",
+                "@type":"string",
+                "@required":"true",
+                "description":"Custom fields that will be captured form the customer xml file separated by comma."
+              },
+              {
+                "@name":"AddressFields",
+                "@type":"string",
+                "@required":"true",
+                "description":"Address fields that will be captured form the customer xml file separated by comma."
+              },
+              {
+                "@name":"FullLoad",
+                "@type":"boolean",
+                "@required":"false",
+                "description":"Full load / Delta"
+              }
             ]
           },
           "status-codes": {
@@ -130,12 +121,18 @@
           "timeout-in-seconds":"900",
           "parameters": {
             "parameter": [
-                {
-                    "@name":"FileName",
-                    "@type":"string",
-                    "@required":"true",
-                    "description":"Customers xml file exported."
-                }
+              {
+                "@name":"FileName",
+                "@type":"string",
+                "@required":"true",
+                "description":"Customers xml file exported."
+              },
+              {
+                "@name":"FullLoad",
+                "@type":"boolean",
+                "@required":"false",
+                "description":"Full load / Delta"
+              }
             ]
           },
           "status-codes": {

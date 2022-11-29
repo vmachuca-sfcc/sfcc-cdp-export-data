@@ -36,10 +36,8 @@ function createOutputFile(parameters) {
     var psh = psm.getProductSearchHits();
     while(psh.hasNext()) {
         var product = psh.next().getProduct();
-        csv.writeNext(CsvUtils.buildRow(product, describe));
-        count++;
+        csv.writeNext(CsvUtils.buildRow(product, describe, parameters));
     };
-
     csv.close();
     fileWriter.close();
 }
