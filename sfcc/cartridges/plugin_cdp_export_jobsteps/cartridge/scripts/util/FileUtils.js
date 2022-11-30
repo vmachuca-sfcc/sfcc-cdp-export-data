@@ -10,7 +10,7 @@ exports.getRootFilePath = function(name, extension) {
 }
 
 exports.getFilePath = function(name, extension) {
-    const folder = File.IMPEX + File.SEPARATOR + 'src' + File.SEPARATOR + 'CDPDataExported';
+    const folder = File.IMPEX + File.SEPARATOR + 'src' + File.SEPARATOR + 'cdpExported';
     const exportFolder = new File(folder);
     if (!exportFolder.exists()) {
         exportFolder.mkdirs();
