@@ -20,3 +20,15 @@ exports.fix = function(data) {
     var str = String(data);
     return str.replace(/([^;])\n/g, '$1 ');
 }
+
+exports.toXmlCase = function (str) {
+    if(str[0].toUpperCase() === str[0]) return str.toLowerCase();
+    return str.split('').map((character) => {
+        if (character == character.toUpperCase() && isNaN(character)) {
+            return '-' + character.toLowerCase();
+        } else {
+            return character;
+        }
+    })
+    .join('');
+}
