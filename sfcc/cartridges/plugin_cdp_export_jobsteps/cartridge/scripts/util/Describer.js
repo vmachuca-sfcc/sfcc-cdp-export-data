@@ -18,3 +18,11 @@ exports.getProduct = function() {
 exports.getOrder = function() {
     return SystemObjectMgr.describe('Order');
 }
+
+exports.getProductLineItem = function() {
+    return SystemObjectMgr.describe('ProductLineItem');
+}
+
+exports.getShippingOrderItem = function() {
+    return SystemObjectMgr.describe('ShippingOrderItem');
+}

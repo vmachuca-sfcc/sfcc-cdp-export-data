@@ -77,3 +77,14 @@ function getValue(object, property) {
         return '';
     }
 }
+
+function getDisplayValue(object, property) {
+    try {
+        return object[property]['displayValue'];
+    } catch (error) {
+        return getValue(object, property);
+    }
+}
+
+exports.getValue = getValue;
+exports.getDisplayValue = getDisplayValue;

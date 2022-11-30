@@ -151,6 +151,12 @@
                 "description":"Exported file name"
               },
               {
+                "@name":"FileNameOrderItems",
+                "@type":"string",
+                "@required":"true",
+                "description":"Exported file name to shipping order items"
+              },
+              {
                 "@name":"FullLoad",
                 "@type":"boolean",
                 "@required":"false",
