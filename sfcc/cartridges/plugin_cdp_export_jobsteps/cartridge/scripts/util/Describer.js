@@ -15,14 +15,6 @@ exports.getProduct = function() {
     return SystemObjectMgr.describe('Product');
 }
 
-exports.getOrder = function() {
-    return SystemObjectMgr.describe('Order');
-}
-
-exports.getProductLineItem = function() {
-    return SystemObjectMgr.describe('ProductLineItem');
-}
-
-exports.getShippingOrderItem = function() {
-    return SystemObjectMgr.describe('ShippingOrderItem');
+exports.getNewsletter = function() {
+    return CustomObjectMgr.describe('Newsletter');
 }

@@ -86,5 +86,14 @@ function getDisplayValue(object, property) {
     }
 }
 
+function getDisplayName(object, property) {
+    try {
+        return object[property]['displayName'];
+    } catch (error) {
+        return getValue(object, property);
+    }
+}
+
 exports.getValue = getValue;
 exports.getDisplayValue = getDisplayValue;
+exports.getDisplayName = getDisplayName;

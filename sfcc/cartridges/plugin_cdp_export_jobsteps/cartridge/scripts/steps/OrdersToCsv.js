@@ -22,6 +22,7 @@ const orderFields = [
     "invoiceNo",
     "productQuantityTotal",
     "status",
+    "confirmationStatus",
     "paymentStatus",
     "channelType",
     "totalGrossPrice",
@@ -41,7 +42,6 @@ const orderFields = [
     "merchandizeTotalTax",
     "cancelCode",
     "cancelDescription",
-    "confirmationStatus",
     "currencyCode",
     "imported",
     "refundedAmount",
@@ -73,6 +73,30 @@ const lineItemsFields = [
     "lastModified"
 ];
 
+const shippingFields = [
+    "UUID",
+    "orderNo",
+    "shipmentNo",
+    "shippingMethod",
+    "shippingMethodID",
+    "shippingStatus",
+    "totalGrossPrice",
+    "totalNetPrice",
+    "totalTax",
+    "trackingNumber",
+    "creationDate",
+    "lastModified"
+];
+
+const shippingAddressFields = [
+    "address1",
+    "address2",
+    "city",
+    "stateCode",
+    "countryCode",
+    "postalCode"
+];
+
 function execute(parameters, stepExecution) {
     try {
         createOutputFile(parameters);
@@ -84,7 +108,7 @@ function execute(parameters, stepExecution) {
 }
 
 function createOutputFile(parameters) {
-    //vars order
+    //var order
     var fileWriter = new FileWriter(new File(FileUtils.getFilePath(parameters.FileName, 'csv')));
     var csv = new CSVStreamWriter(fileWriter);
     csv.writeNext(orderFields);
@@ -93,6 +117,11 @@ function createOutputFile(parameters) {
     var fileWriterLineItem = new FileWriter(new File(FileUtils.getFilePath(parameters.FileNameOrderItems, 'csv')));
     var csvOrderItems = new CSVStreamWriter(fileWriterLineItem);
     csvOrderItems.writeNext(lineItemsFields);
+
+    //var shipping order
+    var fileWriterShipping = new FileWriter(new File(FileUtils.getFilePath(parameters.FileNameShipping, 'csv')));
+    var csvShipping = new CSVStreamWriter(fileWriterShipping);
+    csvShipping.writeNext(shippingFields.concat(shippingAddressFields));
 
     //query
     var orderIterator = OrderMgr.searchOrders(
@@ -108,7 +137,8 @@ function createOutputFile(parameters) {
         //order
         var row = [];
         orderFields.forEach(field => {
-            if(field == 'status' || field == 'paymentStatus' || field == 'channelType') {
+            if(field == 'status' || field == 'paymentStatus' ||
+                field == 'channelType' || field == 'confirmationStatus') {
                 row.push(CsvUtils.getDisplayValue(order, field));
                 return;
             }
@@ -128,12 +158,38 @@ function createOutputFile(parameters) {
             });
             csvOrderItems.writeNext(row);
         });
+
+        //shipping order
+        order.shipments.toArray().forEach(item => {
+            var row = [];
+            shippingFields.forEach(field => {
+                if(field == 'orderNo') {
+                    row.push(order.orderNo);
+                    return;
+                }
+                if(field == 'shippingMethod') {
+                    row.push(CsvUtils.getDisplayName(item, field));
+                    return;
+                }
+                if(field == 'shippingStatus') {
+                    row.push(CsvUtils.getDisplayValue(item, field));
+                    return;
+                }
+                row.push(CsvUtils.getValue(item, field));
+            });
+            shippingAddressFields.forEach(field => {
+                row.push(CsvUtils.getValue(item.shippingAddress, field));
+            });
+            csvShipping.writeNext(row);
+        });
     }
 
     csv.close();
     csvOrderItems.close();
+    csvShipping.close();
     fileWriter.close();
     fileWriterLineItem.close();
+    fileWriterShipping.close();
 }
 
 exports.execute = execute;

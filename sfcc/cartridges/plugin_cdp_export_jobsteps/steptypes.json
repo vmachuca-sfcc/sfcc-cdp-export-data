@@ -62,6 +62,8 @@
         },
         {
           "@type-id": "custom.CustomersXmlToCsv",
+          "@supports-site-context":"true",
+          "@supports-organization-context":"false",
           "module": "plugin_cdp_export_jobsteps/cartridge/scripts/steps/CustomersXmlToCsv.js",
           "description": "Convert customers data from xml to json",
           "function": "execute",
@@ -103,6 +105,8 @@
         },
         {
           "@type-id": "custom.ProductsToCsv",
+          "@supports-site-context":"true",
+          "@supports-organization-context":"false",
           "module": "plugin_cdp_export_jobsteps/cartridge/scripts/steps/ProductsToCsv.js",
           "description": "Get delta product list in csv file based on the last modified",
           "function": "execute",
@@ -138,6 +142,8 @@
         },
         {
           "@type-id": "custom.OrdersToCsv",
+          "@supports-site-context":"true",
+          "@supports-organization-context":"false",
           "module": "plugin_cdp_export_jobsteps/cartridge/scripts/steps/OrdersToCsv.js",
           "description": "Get delta order list in csv file based on the last modified",
           "function": "execute",
@@ -152,6 +158,12 @@
               },
               {
                 "@name":"FileNameOrderItems",
+                "@type":"string",
+                "@required":"true",
+                "description":"Exported file name to order items"
+              },
+              {
+                "@name":"FileNameShipping",
                 "@type":"string",
                 "@required":"true",
                 "description":"Exported file name to shipping order items"
