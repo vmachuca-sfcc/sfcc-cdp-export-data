@@ -5,7 +5,7 @@ const Logger = require('dw/system/Logger');
 const File = require('dw/io/File');
 const FileWriter = require('dw/io/FileWriter');
 const CSVStreamWriter = require('dw/io/CSVStreamWriter');
-const ProductSearchModel = require('dw/catalog/ProductSearchModel');
+const CustomObjectMgr = require('dw/object/CustomObjectMgr');
 const Describer = require('../util/Describer');
 const CsvUtils = require('../util/CsvUtils');
 const FileUtils = require('../util/FileUtils');
@@ -14,8 +14,8 @@ function execute(parameters, stepExecution) {
     try {
         createOutputFile(parameters);
     } catch (error) {
-        Logger.error('An error has occurred: {0}', error.toString());
-        return new Status(Status.ERROR, 'ERROR', error.toString());
+      Logger.error('An error has occurred: {0}', error.toString());
+      return new Status(Status.ERROR, 'ERROR', error.toString());
     }
     return new Status(Status.OK);
 }
@@ -25,21 +25,15 @@ function createOutputFile(parameters) {
     var fileWriter = new FileWriter(new File(outputFile));
     var csv = new CSVStreamWriter(fileWriter);
 
-    var describe = Describer.getProduct();
+    var describe = Describer.getNewsletter();
     csv.writeNext(CsvUtils.buildHeader(describe));
 
-    var psm = new ProductSearchModel();
-    psm.setCategoryID('root');
-    psm.search();
-
-    var psh = psm.getProductSearchHits();
-    var count = 0;
-    while(psh.hasNext() && count < 3) {
-    //while(psh.hasNext()) {
-        var product = psh.next().getProduct();
-        csv.writeNext(CsvUtils.buildRow(product, describe, parameters));
-        count++;
+    var customObjects = CustomObjectMgr.getAllCustomObjects('Newsletter');
+    while(customObjects.hasNext()) {
+        var newsletter = customObjects.next();
+        csv.writeNext(CsvUtils.buildRow(newsletter, describe, parameters));
     };
+    customObjects.close();
     csv.close();
     fileWriter.close();
 }

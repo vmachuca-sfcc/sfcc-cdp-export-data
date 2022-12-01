@@ -188,6 +188,43 @@
               }
             ]
           }
+        },
+        {
+          "@type-id": "custom.NewsletterToCsv",
+          "@supports-site-context":"true",
+          "@supports-organization-context":"false",
+          "module": "plugin_cdp_export_jobsteps/cartridge/scripts/steps/NewsletterToCsv.js",
+          "description": "Get delta order newsletter in csv file",
+          "function": "execute",
+          "timeout-in-seconds":"900",
+          "parameters": {
+            "parameter": [
+              {
+                "@name":"FileName",
+                "@type":"string",
+                "@required":"true",
+                "description":"Exported file name"
+              },
+              {
+                "@name":"FullLoad",
+                "@type":"boolean",
+                "@required":"false",
+                "description":"Full load / Delta"
+              }
+            ]
+          },
+          "status-codes": {
+            "status": [
+              {
+                "@code": "ERROR",
+                "description": "Used when an error occurred."
+              },
+              {
+                "@code": "OK",
+                "description": "Used when everything went well."
+              }
+            ]
+          }
         }
       ]
     }
