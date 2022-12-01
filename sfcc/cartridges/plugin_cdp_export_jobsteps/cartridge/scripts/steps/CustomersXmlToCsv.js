@@ -41,8 +41,7 @@ function createOutputFile(parameters) {
     csv.writeNext(CsvUtils.buildHeader(describeProfile));
 
     var describeAddress = Describer.getCustomerAddress();
-    var addressCols = JsonUtils.removeItem(
-        JsonUtils.removeItem(CsvUtils.buildHeader(describeAddress), 'ID'), 'UUID');
+    var addressCols = JsonUtils.removeItem(CsvUtils.buildHeader(describeAddress), 'ID');
     addressCols.unshift('customerNo');
     csv2.writeNext(addressCols);
 
@@ -62,6 +61,7 @@ function createOutputFile(parameters) {
                     parseAttributeValue: true
                 }
             );
+            //customer data
             describeProfile.attributeDefinitions.toArray().forEach((def) => {
                 if(def.ID == 'customerNo') {
                     customerNo = customerData.customer['attribute-id']['@_customer-no'];
@@ -85,6 +85,7 @@ function createOutputFile(parameters) {
             });
             csv.writeNext(row);
 
+            //address
             if(!customerData.customer.hasOwnProperty('addresses')) return;
             var addresslist = [];
             if(customerData.customer.addresses.address.hasOwnProperty('address1')) {
@@ -96,7 +97,11 @@ function createOutputFile(parameters) {
                 var rowAddress = [];
                 rowAddress.push(customerNo);
                 describeAddress.attributeDefinitions.toArray().forEach((def) => {
-                    if(def.ID == 'ID' || def.ID == 'UUID') return;
+                    if(def.ID == 'ID') return;
+                    if(def.ID == 'UUID') {
+                        rowAddress.push(StringUtils.uuidv4());
+                        return;
+                    }
                     const xmlField = StringUtils.toXmlCase(def.ID);
                     rowAddress.push(
                         def.system

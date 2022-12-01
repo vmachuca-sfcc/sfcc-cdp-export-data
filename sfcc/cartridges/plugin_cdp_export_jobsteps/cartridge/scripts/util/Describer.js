@@ -18,3 +18,7 @@ exports.getProduct = function() {
 exports.getNewsletter = function() {
     return CustomObjectMgr.describe('Newsletter');
 }
+
+exports.getBackInStock = function() {
+    return CustomObjectMgr.describe('backInStock');
+}
