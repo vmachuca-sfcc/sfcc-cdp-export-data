@@ -6,9 +6,11 @@ const File = require('dw/io/File');
 const FileReader = require('dw/io/FileReader');
 const SalesforceService = require('../service/SalesforceService');
 const FileUtils = require('../util/FileUtils');
+const CmpMgr = require('../util/CmpMgr');
 
 function execute(parameters, stepExecution) {
     try {
+        if(CmpMgr.isTurnedOff(parameters)) return new Status(Status.OK);
         //uploadCsvFileToSalesforce(parameters);
     } catch (error) {
       Logger.error('An error has occurred: {0}', error.toString());

@@ -9,7 +9,7 @@ exports.getRootFilePath = function(name, extension) {
     return folder + File.SEPARATOR + name + '.' + extension;
 }
 
-exports.getFilePath = function(name, extension) {
+function getFilePath(name, extension) {
     const folder = File.IMPEX + File.SEPARATOR + 'src' + File.SEPARATOR + 'cdpExported';
     const exportFolder = new File(folder);
     if (!exportFolder.exists()) {
@@ -17,3 +17,13 @@ exports.getFilePath = function(name, extension) {
     }
     return folder + File.SEPARATOR + name + '.' + extension;
 }
+
+exports.remove = function(params, extension) {
+    try {
+        var file = new File(getFilePath(params.FileName, extension));
+        if(!file.exists()) return;
+        file.remove();
+    } catch(error) { }
+}
+
+exports.getFilePath = getFilePath;

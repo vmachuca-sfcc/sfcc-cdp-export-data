@@ -44,6 +44,12 @@
                 "@type":"string",
                 "@required":"true",
                 "description":"ConsumerSecret"
+              },
+              {
+                "@name":"TurnOff",
+                "@type":"boolean",
+                "@required":"false",
+                "description":"Skip the extraction process"
               }
             ]
           },
@@ -83,10 +89,16 @@
                 "description":"Exported file name to the addresses"
               },
               {
-                "@name":"FullLoad",
+                "@name":"Delta",
                 "@type":"boolean",
                 "@required":"false",
-                "description":"Full load / Delta"
+                "description":"Get delta data"
+              },
+              {
+                "@name":"TurnOff",
+                "@type":"boolean",
+                "@required":"false",
+                "description":"Skip the extraction process"
               }
             ]
           },
@@ -120,10 +132,16 @@
                 "description":"Exported file name"
               },
               {
-                "@name":"FullLoad",
+                "@name":"Delta",
                 "@type":"boolean",
                 "@required":"false",
-                "description":"Full load / Delta"
+                "description":"Get delta data"
+              },
+              {
+                "@name":"TurnOff",
+                "@type":"boolean",
+                "@required":"false",
+                "description":"Skip the extraction process"
               }
             ]
           },
@@ -169,10 +187,16 @@
                 "description":"Exported file name to shipping order items"
               },
               {
-                "@name":"FullLoad",
+                "@name":"Delta",
                 "@type":"boolean",
                 "@required":"false",
-                "description":"Full load / Delta"
+                "description":"Get delta data"
+              },
+              {
+                "@name":"TurnOff",
+                "@type":"boolean",
+                "@required":"false",
+                "description":"Skip the extraction process"
               }
             ]
           },
@@ -206,10 +230,16 @@
                 "description":"Exported file name"
               },
               {
-                "@name":"FullLoad",
+                "@name":"Delta",
                 "@type":"boolean",
                 "@required":"false",
-                "description":"Full load / Delta"
+                "description":"Get delta data"
+              },
+              {
+                "@name":"TurnOff",
+                "@type":"boolean",
+                "@required":"false",
+                "description":"Skip the extraction process"
               }
             ]
           },
@@ -243,10 +273,16 @@
                 "description":"Exported file name"
               },
               {
-                "@name":"FullLoad",
+                "@name":"Delta",
                 "@type":"boolean",
                 "@required":"false",
-                "description":"Full load / Delta"
+                "description":"Get delta data"
+              },
+              {
+                "@name":"TurnOff",
+                "@type":"boolean",
+                "@required":"false",
+                "description":"Skip the extraction process"
               }
             ]
           },

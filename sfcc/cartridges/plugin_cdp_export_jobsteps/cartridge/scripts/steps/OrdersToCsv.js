@@ -11,6 +11,7 @@ const OrderMgr = require('dw/order/OrderMgr');
 const CsvUtils = require('../util/CsvUtils');
 const FileUtils = require('../util/FileUtils');
 const Describer = require('../util/Describer');
+const CmpMgr = require('../util/CmpMgr');
 const Delta = require('../util/Delta');
 
 //TODO: Check Query
@@ -117,6 +118,7 @@ const shippingAddressFields = [
 
 function execute(parameters, stepExecution) {
     try {
+        if(CmpMgr.isTurnedOff(parameters)) return new Status(Status.OK);
         createOutputFile(parameters);
     } catch (error) {
         var err = error;

@@ -9,9 +9,11 @@ const CustomObjectMgr = require('dw/object/CustomObjectMgr');
 const Describer = require('../util/Describer');
 const CsvUtils = require('../util/CsvUtils');
 const FileUtils = require('../util/FileUtils');
+const CmpMgr = require('../util/CmpMgr');
 
 function execute(parameters, stepExecution) {
     try {
+        if(CmpMgr.isTurnedOff(parameters)) return new Status(Status.OK);
         createOutputFile(parameters);
     } catch (error) {
       Logger.error('An error has occurred: {0}', error.toString());

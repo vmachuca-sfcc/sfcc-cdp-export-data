@@ -14,9 +14,11 @@ const CsvUtils = require('../util/CsvUtils');
 const JsonUtils = require('../util/JsonUtils');
 const FileUtils = require('../util/FileUtils');
 const StringUtils = require('../util/StringUtils');
+const CmpMgr = require('../util/CmpMgr');
 
 function execute(parameters, stepExecution) {
     try {
+        if(CmpMgr.isTurnedOff(parameters)) return new Status(Status.OK);
         createOutputFile(parameters);
     } catch (error) {
         Logger.error('An error has occurred: {0}', error.toString());
