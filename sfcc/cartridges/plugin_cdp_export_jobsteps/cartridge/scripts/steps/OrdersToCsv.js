@@ -10,6 +10,7 @@ const Order = require('dw/order/Order');
 const OrderMgr = require('dw/order/OrderMgr');
 const CsvUtils = require('../util/CsvUtils');
 const FileUtils = require('../util/FileUtils');
+const Describer = require('../util/Describer');
 const Delta = require('../util/Delta');
 
 //TODO: Check Query
@@ -24,10 +25,26 @@ const orderFields = [
     "status",
     "confirmationStatus",
     "paymentStatus",
+    "replaceCode",
+    "replaceDescription",
+    "replacedOrderNo",
+    "replacementOrderNo",
     "channelType",
     "totalGrossPrice",
     "totalNetPrice",
     "totalTax",
+    "affiliatePartnerID",
+    "affiliatePartnerName",
+    "businessType",
+    "customerEmail",
+    "customerLocaleID",
+    "customerName",
+    "customerOrderReference",
+    "exportAfter",
+    "exportStatus",
+    "externalOrderNo",
+    "externalOrderStatus",
+    "externalOrderText",
     "adjustedMerchandizeTotalGrossPrice",
     "adjustedMerchandizeTotalNetPrice",
     "adjustedMerchandizeTotalPrice",
@@ -47,6 +64,7 @@ const orderFields = [
     "refundedAmount",
     "orderToken",
     "createdBy",
+    "creationDate",
     "lastModified"
 ];
 
@@ -101,6 +119,7 @@ function execute(parameters, stepExecution) {
     try {
         createOutputFile(parameters);
     } catch (error) {
+        var err = error;
         Logger.error('An error has occurred: {0}', error.toString());
         return new Status(Status.ERROR, 'ERROR', error.toString());
     }
@@ -111,7 +130,8 @@ function createOutputFile(parameters) {
     //var order
     var fileWriter = new FileWriter(new File(FileUtils.getFilePath(parameters.FileName, 'csv')));
     var csv = new CSVStreamWriter(fileWriter);
-    csv.writeNext(orderFields);
+    var customFields = Describer.getCustomFieldsName(Describer.getOrder());
+    csv.writeNext(orderFields.concat(customFields));
 
     //var order items
     var fileWriterLineItem = new FileWriter(new File(FileUtils.getFilePath(parameters.FileNameOrderItems, 'csv')));
@@ -144,6 +164,9 @@ function createOutputFile(parameters) {
             }
             row.push(CsvUtils.getValue(order, field));
         });
+        customFields.forEach(field => {
+            row.push(CsvUtils.getCustomValue(order, field));
+        });
         csv.writeNext(row);
 
         //order items
@@ -167,12 +190,9 @@ function createOutputFile(parameters) {
                     row.push(order.orderNo);
                     return;
                 }
-                if(field == 'shippingMethod') {
+                if(field == 'shippingMethod' || field == 'shippingStatus' || field == 'businessType' ||
+                   field == 'exportStatus' || field == 'replaceCode') {
                     row.push(CsvUtils.getDisplayName(item, field));
-                    return;
-                }
-                if(field == 'shippingStatus') {
-                    row.push(CsvUtils.getDisplayValue(item, field));
                     return;
                 }
                 row.push(CsvUtils.getValue(item, field));

@@ -11,6 +11,10 @@ exports.getCustomerAddress = function() {
     return SystemObjectMgr.describe('CustomerAddress');
 }
 
+exports.getOrder = function() {
+    return SystemObjectMgr.describe('Order');
+}
+
 exports.getProduct = function() {
     return SystemObjectMgr.describe('Product');
 }
@@ -21,4 +25,12 @@ exports.getNewsletter = function() {
 
 exports.getBackInStock = function() {
     return CustomObjectMgr.describe('backInStock');
+}
+
+exports.getCustomFieldsName = function(describe) {
+    var fields = [];
+    describe.attributeDefinitions.toArray().forEach((def) => {
+        if(!def.system) fields.push(def.ID);
+    });
+    return fields;
 }

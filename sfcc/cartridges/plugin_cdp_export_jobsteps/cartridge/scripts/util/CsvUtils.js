@@ -78,11 +78,19 @@ function getValue(object, property) {
     }
 }
 
+function getCustomValue(object, property) {
+    try {
+        return object.custom[property];
+    } catch (error) {
+        return '';
+    }
+}
+
 function getDisplayValue(object, property) {
     try {
         return object[property]['displayValue'];
     } catch (error) {
-        return getValue(object, property);
+        return getDisplayName(object, property);
     }
 }
 
@@ -95,5 +103,6 @@ function getDisplayName(object, property) {
 }
 
 exports.getValue = getValue;
+exports.getCustomValue = getCustomValue;
 exports.getDisplayValue = getDisplayValue;
 exports.getDisplayName = getDisplayName;
