@@ -11,7 +11,7 @@ const CmpMgr = require('../util/CmpMgr');
 function execute(parameters, stepExecution) {
     try {
         if(CmpMgr.isTurnedOff(parameters)) return new Status(Status.OK);
-        //uploadCsvFileToSalesforce(parameters);
+        uploadCsvFileToSalesforce(parameters);
     } catch (error) {
       Logger.error('An error has occurred: {0}', error.toString());
       return new Status(Status.ERROR, 'ERROR', error.toString());
