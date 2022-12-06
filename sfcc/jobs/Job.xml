@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jobs xmlns="http://www.demandware.com/xml/impex/jobs/2015-07-01">
+    <job job-id="CDP - B2C Data Ingest" priority="0">
+        <description>Creates a job representing a bulk ingest operation used to send B2C data to Salesforce CDP</description>
+        <parameters/>
+        <flow>
+            <context site-id="RefArch"/>
+            <step step-id="Export Customers To XML" type="ExportCustomers" enforce-restart="true">
+                <description/>
+                <parameters>
+                    <parameter name="ExportFile">customers</parameter>
+                    <parameter name="OverwriteExportFile">true</parameter>
+                </parameters>
+            </step>
+            <step step-id="Export Customers" type="custom.CustomersXmlToCsv" enforce-restart="true">
+                <description>Export Customers with Addresses</description>
+                <parameters>
+                    <parameter name="FileName">customers</parameter>
+                    <parameter name="FileNameAddress">customers-addresses</parameter>
+                    <parameter name="Delta">true</parameter>
+                </parameters>
+            </step>
+            <step step-id="Export Products" type="custom.ProductsToCsv" enforce-restart="true">
+                <description/>
+                <parameters>
+                    <parameter name="FileName">products</parameter>
+                    <parameter name="Delta">true</parameter>
+                    <parameter name="TurnOff">false</parameter>
+                </parameters>
+            </step>
+            <step step-id="Export Orders" type="custom.OrdersToCsv" enforce-restart="true">
+                <description>Export order, order items, shipping details</description>
+                <parameters>
+                    <parameter name="FileName">orders</parameter>
+                    <parameter name="FileNameOrderItems">orders-items</parameter>
+                    <parameter name="FileNameShipping">orders-shippings</parameter>
+                    <parameter name="Delta">true</parameter>
+                </parameters>
+            </step>
+            <step step-id="Export Newsletter" type="custom.NewsletterToCsv" enforce-restart="true">
+                <description/>
+                <parameters>
+                    <parameter name="FileName">newsletter</parameter>
+                    <parameter name="Delta">true</parameter>
+                </parameters>
+            </step>
+            <step step-id="Export BackInStock" type="custom.BackInStockToCsv" enforce-restart="true">
+                <description/>
+                <parameters>
+                    <parameter name="FileName">back-in-stock</parameter>
+                    <parameter name="Delta">true</parameter>
+                </parameters>
+            </step>
+        </flow>
+        <flow>
+            <context site-id="RefArch"/>
+            <step step-id="Create CDP Bulk Ingestion" type="custom.CreateCdpBulkIngestion" enforce-restart="true">
+                <description>Creates a job representing a bulk ingest operation used to send data to Salesforce CDP</description>
+                <parameters>
+                    <parameter name="OrgUrl"></parameter>
+                    <parameter name="Username"></parameter>
+                    <parameter name="Password"></parameter>
+                    <parameter name="ConsumerKey"></parameter>
+                    <parameter name="ConsumerSecret"></parameter>
+                    <parameter name="TurnOff">false</parameter>
+                </parameters>
+            </step>
+        </flow>
+        <rules/>
+        <triggers>
+            <run-recurring enabled="false">
+                <recurrence>
+                    <date-from>2022-12-06Z</date-from>
+                    <start-time>02:22:48.000Z</start-time>
+                    <interval>24h</interval>
+                    <day-of-week>
+                        <weekday>Sunday</weekday>
+                        <weekday>Tuesday</weekday>
+                        <weekday>Wednesday</weekday>
+                        <weekday>Monday</weekday>
+                        <weekday>Thursday</weekday>
+                        <weekday>Friday</weekday>
+                        <weekday>Saturday</weekday>
+                    </day-of-week>
+                </recurrence>
+            </run-recurring>
+        </triggers>
+    </job>
+</jobs>
