@@ -28,21 +28,15 @@ function createBulkInjestion(parameters) {
 
     const items = FileUtils.INGEST_LIST;
     items.forEach(item => {
-
         const jobDetails = CdpService.createJob(credentials, item, parameters.CdpSource);
         if(jobDetails.status == 'ERROR') {
             throw 'Conflit to create job:' + item;
         }
         JobHistory.write(jobDetails.object.id);
-
         const fr = new FileReader(new File(FileUtils.getFilePath(item, 'csv')));
-
         const accept = CdpService.ingest(credentials, jobDetails.object, fr.readString());
-
         fr.close();
-
     });
-    var lol = 1;
 }
 
 function cleanUpJobs(credentials) {
