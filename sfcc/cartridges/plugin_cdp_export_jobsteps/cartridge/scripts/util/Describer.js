@@ -19,12 +19,8 @@ exports.getProduct = function() {
     return SystemObjectMgr.describe('Product');
 }
 
-exports.getNewsletter = function() {
-    return CustomObjectMgr.describe('Newsletter');
-}
-
-exports.getBackInStock = function() {
-    return CustomObjectMgr.describe('backInStock');
+exports.getCustom = function(name) {
+    return CustomObjectMgr.describe(name);
 }
 
 exports.getCustomFieldsName = function(describe) {

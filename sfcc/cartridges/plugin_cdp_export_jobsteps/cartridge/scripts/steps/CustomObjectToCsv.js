@@ -9,6 +9,7 @@ const CustomObjectMgr = require('dw/object/CustomObjectMgr');
 const Describer = require('../util/Describer');
 const CsvUtils = require('../util/CsvUtils');
 const FileUtils = require('../util/FileUtils');
+const StringUtils = require('../util/StringUtils');
 const CmpMgr = require('../util/CmpMgr');
 
 function execute(parameters, stepExecution) {
@@ -23,14 +24,14 @@ function execute(parameters, stepExecution) {
 }
 
 function createOutputFile(parameters) {
-    var outputFile = FileUtils.getFilePath(parameters.FileName, 'csv');
+    var outputFile = FileUtils.getFilePath(StringUtils.capitalizeFirstLetter(parameters.ObjectName), 'csv');
     var fileWriter = new FileWriter(new File(outputFile));
     var csv = new CSVStreamWriter(fileWriter);
 
-    var describe = Describer.getBackInStock();
+    var describe = Describer.getCustom(parameters.ObjectName);
     csv.writeNext(CsvUtils.buildHeader(describe));
 
-    var customObjects = CustomObjectMgr.getAllCustomObjects('backInStock');
+    var customObjects = CustomObjectMgr.getAllCustomObjects(parameters.ObjectName);
     while(customObjects.hasNext()) {
         var newsletter = customObjects.next();
         csv.writeNext(CsvUtils.buildRow(newsletter, describe, parameters));

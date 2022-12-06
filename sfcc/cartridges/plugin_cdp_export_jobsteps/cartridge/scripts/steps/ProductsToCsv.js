@@ -24,7 +24,7 @@ function execute(parameters, stepExecution) {
 }
 
 function createOutputFile(parameters) {
-    var outputFile = FileUtils.getFilePath(parameters.FileName, 'csv');
+    var outputFile = FileUtils.getFilePath(FileUtils.FILE_PRODUCT, 'csv');
     var fileWriter = new FileWriter(new File(outputFile));
     var csv = new CSVStreamWriter(fileWriter);
 

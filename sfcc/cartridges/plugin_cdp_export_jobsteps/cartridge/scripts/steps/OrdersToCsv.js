@@ -130,18 +130,18 @@ function execute(parameters, stepExecution) {
 
 function createOutputFile(parameters) {
     //var order
-    var fileWriter = new FileWriter(new File(FileUtils.getFilePath(parameters.FileName, 'csv')));
+    var fileWriter = new FileWriter(new File(FileUtils.getFilePath(FileUtils.FILE_ORDER, 'csv')));
     var csv = new CSVStreamWriter(fileWriter);
     var customFields = Describer.getCustomFieldsName(Describer.getOrder());
     csv.writeNext(orderFields.concat(customFields));
 
     //var order items
-    var fileWriterLineItem = new FileWriter(new File(FileUtils.getFilePath(parameters.FileNameOrderItems, 'csv')));
+    var fileWriterLineItem = new FileWriter(new File(FileUtils.getFilePath(FileUtils.FILE_ORDER_ITEM, 'csv')));
     var csvOrderItems = new CSVStreamWriter(fileWriterLineItem);
     csvOrderItems.writeNext(lineItemsFields);
 
     //var shipping order
-    var fileWriterShipping = new FileWriter(new File(FileUtils.getFilePath(parameters.FileNameShipping, 'csv')));
+    var fileWriterShipping = new FileWriter(new File(FileUtils.getFilePath(FileUtils.FILE_ORDER_SHIPPING, 'csv')));
     var csvShipping = new CSVStreamWriter(fileWriterShipping);
     csvShipping.writeNext(shippingFields.concat(shippingAddressFields));
 

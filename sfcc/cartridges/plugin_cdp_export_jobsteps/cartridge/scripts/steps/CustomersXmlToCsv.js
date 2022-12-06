@@ -28,14 +28,14 @@ function execute(parameters, stepExecution) {
 }
 
 function createOutputFile(parameters) {
-    var inputFile = FileUtils.getRootFilePath(parameters.FileName, 'xml');
-    var outputFile = FileUtils.getFilePath(parameters.FileName, 'csv');
+    var inputFile = FileUtils.getRootFilePath(parameters.InputFileName, 'xml');
+    var outputFile = FileUtils.getFilePath(FileUtils.FILE_CUSTOMER_PROFILE, 'csv');
     var fileReader = new FileReader(new File(inputFile));
     var fileWriter = new FileWriter(new File(outputFile), 'UTF-8');
     var xsr = new XMLStreamReader(fileReader);
     var csv = new CSVStreamWriter(fileWriter);
 
-    var outputFile2 = FileUtils.getFilePath(parameters.FileNameAddress, 'csv');
+    var outputFile2 = FileUtils.getFilePath(FileUtils.FILE_CUSTOMER_ADDRESS, 'csv');
     var fileWriter2 = new FileWriter(new File(outputFile2), 'UTF-8');
     var csv2 = new CSVStreamWriter(fileWriter2);
 

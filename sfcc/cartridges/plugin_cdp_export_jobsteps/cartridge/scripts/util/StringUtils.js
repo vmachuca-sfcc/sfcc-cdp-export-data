@@ -21,7 +21,7 @@ exports.fix = function(data) {
     return str.replace(/([^;])\n/g, '$1 ');
 }
 
-exports.toXmlCase = function (str) {
+exports.toXmlCase = function(str) {
     if(str[0].toUpperCase() === str[0]) return str.toLowerCase();
     return str.split('').map((character) => {
         if (character == character.toUpperCase() && isNaN(character)) {
@@ -31,4 +31,8 @@ exports.toXmlCase = function (str) {
         }
     })
     .join('');
+}
+
+exports.capitalizeFirstLetter = function(string) {
+  return string.charAt(0).toUpperCase() + string.slice(1);
 }

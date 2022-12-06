@@ -2,6 +2,26 @@
     "step-types": {
       "script-module-step": [
         {
+          "@type-id": "custom.CleanUp",
+          "@supports-site-context":"true",
+          "@supports-organization-context":"false",
+          "module": "plugin_cdp_export_jobsteps/cartridge/scripts/steps/CleanUp.js",
+          "description": "CleanUp CDP Folder",
+          "function": "execute",
+          "status-codes": {
+            "status": [
+              {
+                "@code": "ERROR",
+                "description": "Used when an error occurred."
+              },
+              {
+                "@code": "OK",
+                "description": "Used when everything went well."
+              }
+            ]
+          }
+        },
+        {
           "@type-id": "custom.CreateCdpBulkIngestion",
           "@supports-site-context":"true",
           "@supports-organization-context":"false",
@@ -42,6 +62,12 @@
                 "description":"ConsumerSecret"
               },
               {
+                "@name":"CdpSource",
+                "@type":"string",
+                "@required":"true",
+                "description":"CDP source name"
+              },
+              {
                 "@name":"TurnOff",
                 "@type":"boolean",
                 "@required":"false",
@@ -73,16 +99,10 @@
           "parameters": {
             "parameter": [
               {
-                "@name":"FileName",
+                "@name":"InputFileName",
                 "@type":"string",
                 "@required":"true",
-                "description":"Exported file name"
-              },
-              {
-                "@name":"FileNameAddress",
-                "@type":"string",
-                "@required":"true",
-                "description":"Exported file name to the addresses"
+                "description":"Exported xml file name"
               },
               {
                 "@name":"Delta",
@@ -122,12 +142,6 @@
           "parameters": {
             "parameter": [
               {
-                "@name":"FileName",
-                "@type":"string",
-                "@required":"true",
-                "description":"Exported file name"
-              },
-              {
                 "@name":"Delta",
                 "@type":"boolean",
                 "@required":"false",
@@ -165,24 +179,6 @@
           "parameters": {
             "parameter": [
               {
-                "@name":"FileName",
-                "@type":"string",
-                "@required":"true",
-                "description":"Exported file name"
-              },
-              {
-                "@name":"FileNameOrderItems",
-                "@type":"string",
-                "@required":"true",
-                "description":"Exported file name to order items"
-              },
-              {
-                "@name":"FileNameShipping",
-                "@type":"string",
-                "@required":"true",
-                "description":"Exported file name to shipping order items"
-              },
-              {
                 "@name":"Delta",
                 "@type":"boolean",
                 "@required":"false",
@@ -210,63 +206,20 @@
           }
         },
         {
-          "@type-id": "custom.NewsletterToCsv",
+          "@type-id": "custom.CustomObjectToCsv",
           "@supports-site-context":"true",
           "@supports-organization-context":"false",
-          "module": "plugin_cdp_export_jobsteps/cartridge/scripts/steps/NewsletterToCsv.js",
+          "module": "plugin_cdp_export_jobsteps/cartridge/scripts/steps/CustomObjectToCsv.js",
           "description": "Get delta newsletter in csv file",
           "function": "execute",
           "timeout-in-seconds":"900",
           "parameters": {
             "parameter": [
               {
-                "@name":"FileName",
+                "@name":"ObjectName",
                 "@type":"string",
                 "@required":"true",
-                "description":"Exported file name"
-              },
-              {
-                "@name":"Delta",
-                "@type":"boolean",
-                "@required":"false",
-                "description":"Get delta data"
-              },
-              {
-                "@name":"TurnOff",
-                "@type":"boolean",
-                "@required":"false",
-                "description":"Skip the extraction process"
-              }
-            ]
-          },
-          "status-codes": {
-            "status": [
-              {
-                "@code": "ERROR",
-                "description": "Used when an error occurred."
-              },
-              {
-                "@code": "OK",
-                "description": "Used when everything went well."
-              }
-            ]
-          }
-        },
-        {
-          "@type-id": "custom.BackInStockToCsv",
-          "@supports-site-context":"true",
-          "@supports-organization-context":"false",
-          "module": "plugin_cdp_export_jobsteps/cartridge/scripts/steps/BackInStockToCsv.js",
-          "description": "Get delta back in stock in csv file",
-          "function": "execute",
-          "timeout-in-seconds":"900",
-          "parameters": {
-            "parameter": [
-              {
-                "@name":"FileName",
-                "@type":"string",
-                "@required":"true",
-                "description":"Exported file name"
+                "description":"Custom object name"
               },
               {
                 "@name":"Delta",

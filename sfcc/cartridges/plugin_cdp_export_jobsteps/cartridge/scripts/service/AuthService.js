@@ -1,10 +1,9 @@
 'use strict';
 
-const StringUtils = require('../util/StringUtils');
 const LocalServiceRegistry = require('dw/svc/LocalServiceRegistry');
 
 function getToken(parameters) {
-    var svc = LocalServiceRegistry.createService("CDPExportJobStepAuth", {
+    var svc = LocalServiceRegistry.createService("CDPCoreAuth", {
         createRequest: function(svc, args) {
             svc.setRequestMethod('POST');
             svc.addHeader('Content-Type', 'application/x-www-form-urlencoded');
@@ -21,12 +20,11 @@ function getToken(parameters) {
             return JSON.parse(result.text);
         }
     });
-    const credentials = svc.call();
-    return credentials.object.access_token;
+    return svc.call().object.access_token;
 }
 
-function getCdpToken(parameters) {
-    var svc = LocalServiceRegistry.createService("CDPExportJobStepCdpAuth", {
+exports.getCdpCredentials = function(parameters) {
+    var svc = LocalServiceRegistry.createService("CDPAuth", {
         createRequest: function(svc, args) {
             svc.setRequestMethod('POST');
             svc.addHeader('Content-Type', 'application/x-www-form-urlencoded');
@@ -41,28 +39,5 @@ function getCdpToken(parameters) {
             return JSON.parse(result.text);
         }
     });
-    const credentials = svc.call();
-    return 'Bearer ' + credentials.object.access_token;
-}
-
-exports.createIngestJob = function(parameters, fileReader) {
-    var svc = LocalServiceRegistry.createService("CDPExportJobInjest", {
-        createRequest: function(svc, args) {
-            svc.setRequestMethod('POST');
-            svc.addHeader('Content-Type', 'application/json');
-            svc.addHeader('Authorization', 'Bearer ' + getCdpToken(parameters));
-            svc.setURL(parameters.OrgUrl + '/api/v1/ingest/jobs');
-
-            var payload = {
-                "object": "runner_profiles",
-                "sourceName":"Event_API",
-                "operation":"upsert"
-             };
-            return JOSN.stringify(payload);
-        },
-        parseResponse: function (svc, result) {
-            return JSON.parse(result.text);
-        }
-    });
-    svc.call();
+    return svc.call().object;
 }
