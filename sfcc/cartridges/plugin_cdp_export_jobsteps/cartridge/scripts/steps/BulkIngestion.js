@@ -11,7 +11,7 @@ const CmpMgr = require('../util/CmpMgr');
 function execute(parameters, stepExecution) {
     try {
         if(CmpMgr.isTurnedOff(parameters)) return new Status(Status.OK);
-        uploadCsvFileToSalesforce(parameters);
+        createBulkInjestion(parameters);
     } catch (error) {
       Logger.error('An error has occurred: {0}', error.toString());
       return new Status(Status.ERROR, 'ERROR', error.toString());
@@ -19,11 +19,11 @@ function execute(parameters, stepExecution) {
     return new Status(Status.OK);
 }
 
-function uploadCsvFileToSalesforce(parameters) {
-    var path = FileUtils.getFilePath(parameters.FileName, 'csv');
-    var fr = new FileReader(new File(path));
-    SalesforceService.uploadCsvFile(parameters, fr);
-    fr.close();
+function createBulkInjestion(parameters) {
+    //var path = FileUtils.getFilePath(parameters.FileName, 'csv');
+    //var fr = new FileReader(new File(path));
+    //SalesforceService.uploadCsvFile(parameters, fr);
+    //fr.close();
 }
 
 exports.execute = execute;

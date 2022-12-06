@@ -9,6 +9,7 @@ const ProductSearchModel = require('dw/catalog/ProductSearchModel');
 const Describer = require('../util/Describer');
 const CsvUtils = require('../util/CsvUtils');
 const FileUtils = require('../util/FileUtils');
+const Delta = require('../util/Delta');
 const CmpMgr = require('../util/CmpMgr');
 
 function execute(parameters, stepExecution) {
@@ -36,9 +37,10 @@ function createOutputFile(parameters) {
 
     var psh = psm.getProductSearchHits();
     var count = 0;
-    while(psh.hasNext() && count < 3) {
     //while(psh.hasNext()) {
+    while(psh.hasNext() && count < 3) {
         var product = psh.next().getProduct();
+        if(!Delta.isPartOf(product, parameters)) continue;
         csv.writeNext(CsvUtils.buildRow(product, describe, parameters));
         count++;
     };

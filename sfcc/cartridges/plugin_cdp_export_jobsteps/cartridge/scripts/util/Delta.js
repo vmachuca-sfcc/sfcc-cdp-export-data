@@ -2,12 +2,16 @@
 
 const moment = require('moment/moment');
 
-exports.skip = function(object, params) {
+exports.isPartOf = function(object, params) {
     try{
-        if(params.FullLoad) return false;
-        const lastModified = object['lastModified'];
+        // if delta is false all items will part of
+        if(!params.Delta) return true;
+        const data = object['lastModified'];
+        // if the value is null or empty the item will be skipped
+        if(!data) return false;
         const yesterday =  moment().subtract(1, 'days');
-        return moment(lastModified).isAfter(yesterday);
+        const lastModified = moment();
+        return lastModified.isSame(yesterday, 'day');
     } catch(error) {
         return false;
     }

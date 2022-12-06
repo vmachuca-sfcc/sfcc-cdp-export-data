@@ -2,19 +2,15 @@
     "step-types": {
       "script-module-step": [
         {
-          "@type-id": "custom.UploadCsvToSalesforce",
-          "module": "plugin_cdp_export_jobsteps/cartridge/scripts/steps/UploadCsvToSalesforce.js",
-          "description": "Upload csv file to a Salesforce core instance",
+          "@type-id": "custom.CreateCdpBulkIngestion",
+          "@supports-site-context":"true",
+          "@supports-organization-context":"false",
+          "module": "plugin_cdp_export_jobsteps/cartridge/scripts/steps/BulkIngestion.js",
+          "description": "Creates a job representing a bulk ingest operation used to send data to Salesforce CDP",
           "function": "execute",
           "timeout-in-seconds":"900",
           "parameters": {
             "parameter": [
-              {
-                "@name":"FileName",
-                "@type":"string",
-                "@required":"true",
-                "description":"CSV file to be uploaded."
-              },
               {
                 "@name":"OrgUrl",
                 "@type":"string",
