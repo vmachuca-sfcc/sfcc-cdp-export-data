@@ -17,8 +17,8 @@ function execute(parameters, stepExecution) {
         if(CmpMgr.isTurnedOff(parameters)) return new Status(Status.OK);
         createOutputFile(parameters);
     } catch (error) {
-      Logger.error('An error has occurred: {0}', error.toString());
-      return new Status(Status.ERROR, 'ERROR', error.toString());
+        Logger.error('An error has occurred: {0}', error.toString());
+        return new Status(Status.ERROR, 'ERROR', error.toString());
     }
     return new Status(Status.OK);
 }

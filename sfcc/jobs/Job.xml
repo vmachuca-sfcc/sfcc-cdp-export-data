@@ -5,6 +5,13 @@
         <parameters/>
         <flow>
             <context site-id="RefArch"/>
+            <step step-id="CleanUp" type="custom.CleanUp" enforce-restart="true">
+                <description/>
+                <parameters/>
+            </step>
+        </flow>
+        <flow>
+            <context site-id="RefArch"/>
             <step step-id="Export Customers To XML" type="ExportCustomers" enforce-restart="true">
                 <description/>
                 <parameters>
@@ -15,40 +22,22 @@
             <step step-id="Export Customers" type="custom.CustomersXmlToCsv" enforce-restart="true">
                 <description>Export Customers with Addresses</description>
                 <parameters>
-                    <parameter name="FileName">customers</parameter>
-                    <parameter name="FileNameAddress">customers-addresses</parameter>
-                    <parameter name="Delta">true</parameter>
+                    <parameter name="InputFileName">customers</parameter>
+                    <parameter name="Delta">false</parameter>
                 </parameters>
             </step>
             <step step-id="Export Products" type="custom.ProductsToCsv" enforce-restart="true">
                 <description/>
                 <parameters>
-                    <parameter name="FileName">products</parameter>
-                    <parameter name="Delta">true</parameter>
+                    <parameter name="Delta">false</parameter>
                     <parameter name="TurnOff">false</parameter>
                 </parameters>
             </step>
             <step step-id="Export Orders" type="custom.OrdersToCsv" enforce-restart="true">
                 <description>Export order, order items, shipping details</description>
                 <parameters>
-                    <parameter name="FileName">orders</parameter>
-                    <parameter name="FileNameOrderItems">orders-items</parameter>
-                    <parameter name="FileNameShipping">orders-shippings</parameter>
-                    <parameter name="Delta">true</parameter>
-                </parameters>
-            </step>
-            <step step-id="Export Newsletter" type="custom.NewsletterToCsv" enforce-restart="true">
-                <description/>
-                <parameters>
-                    <parameter name="FileName">newsletter</parameter>
-                    <parameter name="Delta">true</parameter>
-                </parameters>
-            </step>
-            <step step-id="Export BackInStock" type="custom.BackInStockToCsv" enforce-restart="true">
-                <description/>
-                <parameters>
-                    <parameter name="FileName">back-in-stock</parameter>
-                    <parameter name="Delta">true</parameter>
+                    <parameter name="Delta">false</parameter>
+                    <parameter name="TurnOff">false</parameter>
                 </parameters>
             </step>
         </flow>
@@ -62,6 +51,7 @@
                     <parameter name="Password"></parameter>
                     <parameter name="ConsumerKey"></parameter>
                     <parameter name="ConsumerSecret"></parameter>
+                    <parameter name="CdpSource"></parameter>
                     <parameter name="TurnOff">false</parameter>
                 </parameters>
             </step>
@@ -74,13 +64,13 @@
                     <start-time>02:22:48.000Z</start-time>
                     <interval>24h</interval>
                     <day-of-week>
-                        <weekday>Sunday</weekday>
                         <weekday>Tuesday</weekday>
-                        <weekday>Wednesday</weekday>
                         <weekday>Monday</weekday>
+                        <weekday>Sunday</weekday>
+                        <weekday>Wednesday</weekday>
                         <weekday>Thursday</weekday>
-                        <weekday>Friday</weekday>
                         <weekday>Saturday</weekday>
+                        <weekday>Friday</weekday>
                     </day-of-week>
                 </recurrence>
             </run-recurring>

@@ -10,14 +10,14 @@ const FILE_ORDER_ITEM       = 'OrderItem';
 const FILE_ORDER_SHIPPING   = 'OrderShipping';
 
 function getRootFolder() {
-    return File.IMPEX + File.SEPARATOR + 'src' + File.SEPARATOR + 'cdpIngest';
+    return File.IMPEX + File.SEPARATOR + 'src' + File.SEPARATOR + 'cdpWorkspace';
 }
 
 function getFolder() {
     return getRootFolder() + File.SEPARATOR + 'data';
 }
 
-exports.createFolder = function() {
+function createFolder() {
     var rootFolder = new File(getRootFolder());
     if(!rootFolder.exists()) rootFolder.mkdir();
 
@@ -25,7 +25,7 @@ exports.createFolder = function() {
     if(!folder.exists()) folder.mkdir();
 }
 
-exports.purgeFolder = function() {
+function purgeFolder () {
     try {
         const folder = new File(getFolder());
         if (folder.exists()) folder.remove();
@@ -34,6 +34,11 @@ exports.purgeFolder = function() {
 
 function getFilePath(name, extension) {
     return getFolder() + File.SEPARATOR + name + '.' + extension;
+}
+
+exports.resetWorkspace = function() {
+    purgeFolder();
+    createFolder();
 }
 
 exports.getRootFilePath = function(name, extension) {
