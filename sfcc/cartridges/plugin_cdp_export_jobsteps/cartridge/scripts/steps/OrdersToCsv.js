@@ -13,108 +13,10 @@ const FileUtils = require('../util/FileUtils');
 const Describer = require('../util/Describer');
 const CmpMgr = require('../util/CmpMgr');
 const Delta = require('../util/Delta');
+const OrderMap = require('../map/OrderMap');
 
 //TODO: Check Query
 const query = "exportAfter<{0}";
-
-const orderFields = [
-    "UUID",
-    "orderNo",
-    "customerNo",
-    "invoiceNo",
-    "productQuantityTotal",
-    "status",
-    "confirmationStatus",
-    "paymentStatus",
-    "replaceCode",
-    "replaceDescription",
-    "replacedOrderNo",
-    "replacementOrderNo",
-    "channelType",
-    "totalGrossPrice",
-    "totalNetPrice",
-    "totalTax",
-    "affiliatePartnerID",
-    "affiliatePartnerName",
-    "businessType",
-    "customerEmail",
-    "customerLocaleID",
-    "customerName",
-    "customerOrderReference",
-    "exportAfter",
-    "exportStatus",
-    "externalOrderNo",
-    "externalOrderStatus",
-    "externalOrderText",
-    "adjustedMerchandizeTotalGrossPrice",
-    "adjustedMerchandizeTotalNetPrice",
-    "adjustedMerchandizeTotalPrice",
-    "adjustedMerchandizeTotalTax",
-    "adjustedShippingTotalGrossPrice",
-    "adjustedShippingTotalNetPrice",
-    "adjustedShippingTotalPrice",
-    "adjustedShippingTotalTax",
-    "merchandizeTotalGrossPrice",
-    "merchandizeTotalNetPrice",
-    "merchandizeTotalPrice",
-    "merchandizeTotalTax",
-    "cancelCode",
-    "cancelDescription",
-    "currencyCode",
-    "imported",
-    "refundedAmount",
-    "orderToken",
-    "createdBy",
-    "creationDate",
-    "lastModified"
-];
-
-const lineItemsFields = [
-    "UUID",
-    "orderNo",
-    "productID",
-    "productName",
-    "quantityValue",
-    "adjustedGrossPrice",
-    "adjustedNetPrice",
-    "adjustedGrossPrice",
-    "adjustedTax",
-    "basePrice",
-    "grossPrice",
-    "netPrice",
-    "priceValue",
-    "gift",
-    "giftMessage",
-    "tax",
-    "taxBasis",
-    "taxClassID",
-    "taxRate",
-    "lastModified"
-];
-
-const shippingFields = [
-    "UUID",
-    "orderNo",
-    "shipmentNo",
-    "shippingMethod",
-    "shippingMethodID",
-    "shippingStatus",
-    "totalGrossPrice",
-    "totalNetPrice",
-    "totalTax",
-    "trackingNumber",
-    "creationDate",
-    "lastModified"
-];
-
-const shippingAddressFields = [
-    "address1",
-    "address2",
-    "city",
-    "stateCode",
-    "countryCode",
-    "postalCode"
-];
 
 function execute(parameters, stepExecution) {
     try {
@@ -132,17 +34,17 @@ function createOutputFile(parameters) {
     var fileWriter = new FileWriter(new File(FileUtils.getFilePath(FileUtils.FILE_ORDER, 'csv')));
     var csv = new CSVStreamWriter(fileWriter);
     var customFields = Describer.getCustomFieldsName(Describer.getOrder());
-    csv.writeNext(orderFields.concat(customFields));
+    csv.writeNext(OrderMap.orderFields.concat(customFields));
 
     //var order items
     var fileWriterLineItem = new FileWriter(new File(FileUtils.getFilePath(FileUtils.FILE_ORDER_ITEM, 'csv')));
     var csvOrderItems = new CSVStreamWriter(fileWriterLineItem);
-    csvOrderItems.writeNext(lineItemsFields);
+    csvOrderItems.writeNext(OrderMap.lineItemsFields);
 
     //var shipping order
     var fileWriterShipping = new FileWriter(new File(FileUtils.getFilePath(FileUtils.FILE_ORDER_SHIPPING, 'csv')));
     var csvShipping = new CSVStreamWriter(fileWriterShipping);
-    csvShipping.writeNext(shippingFields.concat(shippingAddressFields));
+    csvShipping.writeNext(OrderMap.shippingFields.concat(OrderMap.shippingAddressFields));
 
     //query
     var orderIterator = OrderMgr.searchOrders(
@@ -157,7 +59,7 @@ function createOutputFile(parameters) {
 
         //order
         var row = [];
-        orderFields.forEach(field => {
+        OrderMap.orderFields.forEach(field => {
             if(field == 'status' || field == 'paymentStatus' ||
                 field == 'channelType' || field == 'confirmationStatus') {
                 row.push(CsvUtils.getDisplayValue(order, field));
@@ -173,7 +75,7 @@ function createOutputFile(parameters) {
         //order items
         order.allProductLineItems.toArray().forEach(item => {
             var row = [];
-            lineItemsFields.forEach(field => {
+            OrderMap.lineItemsFields.forEach(field => {
                 if(field == 'orderNo') {
                     row.push(order.orderNo);
                     return;
@@ -186,7 +88,7 @@ function createOutputFile(parameters) {
         //shipping order
         order.shipments.toArray().forEach(item => {
             var row = [];
-            shippingFields.forEach(field => {
+            OrderMap.shippingFields.forEach(field => {
                 if(field == 'orderNo') {
                     row.push(order.orderNo);
                     return;
@@ -198,7 +100,7 @@ function createOutputFile(parameters) {
                 }
                 row.push(CsvUtils.getValue(item, field));
             });
-            shippingAddressFields.forEach(field => {
+            OrderMap.shippingAddressFields.forEach(field => {
                 row.push(CsvUtils.getValue(item.shippingAddress, field));
             });
             csvShipping.writeNext(row);

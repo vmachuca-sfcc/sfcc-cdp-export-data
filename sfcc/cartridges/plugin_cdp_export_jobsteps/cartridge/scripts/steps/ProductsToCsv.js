@@ -11,6 +11,7 @@ const CsvUtils = require('../util/CsvUtils');
 const FileUtils = require('../util/FileUtils');
 const Delta = require('../util/Delta');
 const CmpMgr = require('../util/CmpMgr');
+const ProductMap = require('../map/ProductMap');
 
 function execute(parameters, stepExecution) {
     try {
@@ -29,7 +30,7 @@ function createOutputFile(parameters) {
     var csv = new CSVStreamWriter(fileWriter);
 
     var describe = Describer.getProduct();
-    csv.writeNext(CsvUtils.buildHeader(describe));
+    csv.writeNext(ProductMap.check(CsvUtils.buildHeader(describe)));
 
     var psm = new ProductSearchModel();
     psm.setCategoryID('root');
@@ -37,8 +38,8 @@ function createOutputFile(parameters) {
 
     var psh = psm.getProductSearchHits();
     var count = 0;
-    //while(psh.hasNext()) {
-    while(psh.hasNext() && count < 3) {
+    while(psh.hasNext()) {
+    //while(psh.hasNext() && count < 10) {
         var product = psh.next().getProduct();
         if(!Delta.isPartOf(product, parameters)) continue;
         csv.writeNext(CsvUtils.buildRow(product, describe, parameters));

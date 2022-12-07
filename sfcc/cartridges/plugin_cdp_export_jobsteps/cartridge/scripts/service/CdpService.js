@@ -22,6 +22,9 @@ exports.createJob = function(credentials, object, source) {
         }
     });
     const response = svc.call();
+    if(response.status == 'ERROR') {
+        throw 'Error to create job:' + item;
+    }
     return response;
 }
 
@@ -39,11 +42,37 @@ exports.ingest = function(credentials, jobDetails, payload) {
         }
     });
     const response = svc.call();
-    return response.object;
+    if(response.status == 'ERROR') {
+        throw 'Error to update data to job:' + item;
+    }
+    return response;
+}
+
+exports.uploadComplete = function(credentials, jobId) {
+    var svc = LocalServiceRegistry.createService("CDPUpdateJob", {
+        createRequest: function(svc, args) {
+            svc.setRequestMethod('PATCH');
+            svc.addHeader('Content-Type', 'application/json');
+            svc.addHeader('Authorization', 'Bearer ' + credentials.access_token);
+            svc.setURL('https://' + credentials.instance_url + '/api/v1/ingest/jobs/' + jobId);
+            var payload = {
+                "state": "UploadComplete"
+             };
+            return JSON.stringify(payload);
+        },
+        parseResponse: function (svc, result) {
+            return JSON.parse(result.text);
+        }
+    });
+    const response = svc.call();
+    if(response.status == 'ERROR') {
+        throw 'Error to update job status:' + item;
+    }
+    return response;
 }
 
 exports.cleanUp = function(credentials, jobId) {
-    var svcAbort = LocalServiceRegistry.createService("CDPAbortJob", {
+    var svcAbort = LocalServiceRegistry.createService("CDPUpdateJob", {
         createRequest: function(svc, args) {
             svc.setRequestMethod('PATCH');
             svc.addHeader('Content-Type', 'application/json');

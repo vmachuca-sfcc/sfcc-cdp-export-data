@@ -9,6 +9,14 @@ const FILE_ORDER            = 'Order';
 const FILE_ORDER_ITEM       = 'OrderItem';
 const FILE_ORDER_SHIPPING   = 'OrderShipping';
 
+const SYSTEM_INGEST_LIST = [
+    FILE_CUSTOMER_PROFILE,
+    FILE_CUSTOMER_ADDRESS,
+    FILE_PRODUCT,
+    FILE_ORDER,
+    FILE_ORDER_ITEM
+];
+
 function getRootFolder() {
     return File.IMPEX + File.SEPARATOR + 'src' + File.SEPARATOR + 'cdpWorkspace';
 }
@@ -54,6 +62,10 @@ exports.remove = function(params, extension) {
     } catch(error) { }
 }
 
+exports.getIngestList = function(params) {
+    return SYSTEM_INGEST_LIST.concat(params.CustomObjects.split(','))
+}
+
 exports.getFilePath = getFilePath;
 exports.getRootFolder = getRootFolder;
 
@@ -63,12 +75,5 @@ exports.FILE_PRODUCT          = FILE_PRODUCT;
 exports.FILE_ORDER            = FILE_ORDER;
 exports.FILE_ORDER_ITEM       = FILE_ORDER_ITEM;
 exports.FILE_ORDER_SHIPPING   = FILE_ORDER_SHIPPING;
-
-exports.INGEST_LIST = [
-    FILE_CUSTOMER_PROFILE,
-    FILE_CUSTOMER_ADDRESS,
-    FILE_ORDER,
-    FILE_ORDER_ITEM
-];
 
 exports.COMMA_CHAR = ',';

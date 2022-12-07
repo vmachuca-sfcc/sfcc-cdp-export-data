@@ -68,6 +68,12 @@
                 "description":"CDP source name"
               },
               {
+                "@name":"CustomObjects",
+                "@type":"string",
+                "@required":"false",
+                "description":"Custom objects names to be ingest to CDP. The values must be separated by comma"
+              },
+              {
                 "@name":"TurnOff",
                 "@type":"boolean",
                 "@required":"false",
