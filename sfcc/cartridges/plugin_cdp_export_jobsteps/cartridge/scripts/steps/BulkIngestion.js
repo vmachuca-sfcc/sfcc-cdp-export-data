@@ -26,8 +26,9 @@ function createBulkInjestion(parameters) {
     const credentials = AuthService.getCdpCredentials(parameters);
     cleanUpJobs(credentials);
 
-    const items = FileUtils.INGEST_LIST;
-    items.forEach(item => {
+    const itemsToBeIngested = FileUtils.INGEST_LIST;
+
+    itemsToBeIngested.forEach(item => {
         const jobDetails = CdpService.createJob(credentials, item, parameters.CdpSource);
         if(jobDetails.status == 'ERROR') {
             throw 'Conflit to create job:' + item;
