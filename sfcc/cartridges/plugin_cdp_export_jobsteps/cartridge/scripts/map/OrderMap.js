@@ -3,10 +3,12 @@
 exports.orderFields = [
     "UUID",
     "orderNo",
+    "originalOrderNo",
     "customerNo",
     "invoiceNo",
     "productQuantityTotal",
     "status",
+    "shippingStatus",
     "confirmationStatus",
     "paymentStatus",
     "replaceCode",

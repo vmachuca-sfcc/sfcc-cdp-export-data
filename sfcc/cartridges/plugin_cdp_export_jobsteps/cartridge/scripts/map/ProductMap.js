@@ -48,6 +48,10 @@ const mapping = [
     {
         b2cName: 'trf_Upholstered___Mood',
         cdpName: 'trf_Upholstered_Mood'
+    },
+    {
+        b2cName: 'trv_Size_N_m_',
+        cdpName: 'trv_Size_N_m'
     }
 ];
 
