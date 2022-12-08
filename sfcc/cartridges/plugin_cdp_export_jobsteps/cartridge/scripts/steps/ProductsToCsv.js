@@ -18,6 +18,7 @@ function execute(parameters, stepExecution) {
         if(CmpMgr.isTurnedOff(parameters)) return new Status(Status.OK);
         createOutputFile(parameters);
     } catch (error) {
+        var err = error;
         Logger.error('An error has occurred: {0}', error.toString());
         return new Status(Status.ERROR, 'ERROR', error.toString());
     }
@@ -38,8 +39,8 @@ function createOutputFile(parameters) {
 
     var psh = psm.getProductSearchHits();
     var count = 0;
-    while(psh.hasNext()) {
-    //while(psh.hasNext() && count < 10) {
+    //while(psh.hasNext()) {
+    while(psh.hasNext() && count < 3) {
         var product = psh.next().getProduct();
         if(!Delta.isPartOf(product, parameters)) continue;
         csv.writeNext(CsvUtils.buildRow(product, describe, parameters));

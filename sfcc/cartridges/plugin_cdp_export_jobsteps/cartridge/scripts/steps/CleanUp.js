@@ -6,7 +6,7 @@ const FileUtils = require('../util/FileUtils');
 
 function execute(parameters, stepExecution) {
     try {
-        FileUtils.resetWorkspace();
+       FileUtils.resetWorkspace();
     } catch (error) {
         Logger.error('An error has occurred: {0}', error.toString());
         return new Status(Status.ERROR, 'ERROR', error.toString());

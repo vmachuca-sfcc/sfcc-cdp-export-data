@@ -95,6 +95,67 @@
           }
         },
         {
+          "@type-id": "custom.CdpIngestionMonitor",
+          "@supports-site-context":"false",
+          "@supports-organization-context":"true",
+          "module": "plugin_cdp_export_jobsteps/cartridge/scripts/steps/IngestionMonitor.js",
+          "description": "Monitoring CDP Jobs status",
+          "function": "execute",
+          "timeout-in-seconds":"900",
+          "parameters": {
+            "parameter": [
+              {
+                "@name":"OrgUrl",
+                "@type":"string",
+                "@required":"true",
+                "description":"OrgUrl"
+              },
+              {
+                "@name":"Username",
+                "@type":"string",
+                "@required":"true",
+                "description":"Username"
+              },
+              {
+                "@name":"Password",
+                "@type":"string",
+                "@required":"true",
+                "description":"Password"
+              },
+              {
+                "@name":"ConsumerKey",
+                "@type":"string",
+                "@required":"true",
+                "description":"ConsumerKey"
+              },
+              {
+                "@name":"ConsumerSecret",
+                "@type":"string",
+                "@required":"true",
+                "description":"ConsumerSecret"
+              },
+              {
+                "@name":"TurnOff",
+                "@type":"boolean",
+                "@required":"false",
+                "description":"Skip the extraction process"
+              }
+            ]
+          },
+          "status-codes": {
+            "status": [
+              {
+                "@code": "ERROR",
+                "description": "Used when an error occurred."
+              },
+              {
+                "@code": "OK",
+                "description": "Used when everything went well."
+              }
+            ]
+          }
+        },
+        {
           "@type-id": "custom.CustomersXmlToCsv",
           "@supports-site-context":"true",
           "@supports-organization-context":"false",

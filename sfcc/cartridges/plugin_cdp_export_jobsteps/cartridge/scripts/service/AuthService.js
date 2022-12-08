@@ -3,7 +3,7 @@
 const LocalServiceRegistry = require('dw/svc/LocalServiceRegistry');
 
 function getToken(parameters) {
-    var svc = LocalServiceRegistry.createService("CDPCoreAuth", {
+    var svc = LocalServiceRegistry.createService("CDPDataIngestJob", {
         createRequest: function(svc, args) {
             svc.setRequestMethod('POST');
             svc.addHeader('Content-Type', 'application/x-www-form-urlencoded');
@@ -24,7 +24,7 @@ function getToken(parameters) {
 }
 
 exports.getCdpCredentials = function(parameters) {
-    var svc = LocalServiceRegistry.createService("CDPAuth", {
+    var svc = LocalServiceRegistry.createService("CDPDataIngestJob", {
         createRequest: function(svc, args) {
             svc.setRequestMethod('POST');
             svc.addHeader('Content-Type', 'application/x-www-form-urlencoded');
