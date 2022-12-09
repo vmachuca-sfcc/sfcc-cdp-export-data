@@ -41,7 +41,7 @@ function cleanUpJobs(credentials) {
     JobHistory.read().forEach(jobId => {
         CdpService.cleanUp(credentials, jobId);
     });
-    JobHistory.purge();
+    //JobHistory.purge();
 }
 
 exports.execute = execute;

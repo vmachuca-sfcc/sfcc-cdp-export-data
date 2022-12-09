@@ -100,6 +100,7 @@ function createOutputFile(parameters) {
                 rowAddress.push(customerNo);
                 describeAddress.attributeDefinitions.toArray().forEach((def) => {
                     if(def.ID == 'ID') return;
+                    var add = address;
                     if(def.ID == 'UUID') {
                         rowAddress.push(StringUtils.uuidv4());
                         return;

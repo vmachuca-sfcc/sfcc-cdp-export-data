@@ -39,8 +39,8 @@ function createOutputFile(parameters) {
 
     var psh = psm.getProductSearchHits();
     var count = 0;
-    //while(psh.hasNext()) {
-    while(psh.hasNext() && count < 3) {
+    while(psh.hasNext()) {
+    //while(psh.hasNext() && count < 3) {
         var product = psh.next().getProduct();
         if(!Delta.isPartOf(product, parameters)) continue;
         csv.writeNext(CsvUtils.buildRow(product, describe, parameters));
