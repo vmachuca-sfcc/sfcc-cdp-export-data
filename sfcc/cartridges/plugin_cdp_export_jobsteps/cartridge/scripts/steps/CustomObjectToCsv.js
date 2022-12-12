@@ -10,6 +10,7 @@ const Describer = require('../util/Describer');
 const CsvUtils = require('../util/CsvUtils');
 const FileUtils = require('../util/FileUtils');
 const StringUtils = require('../util/StringUtils');
+const Delta = require('../util/Delta');
 const CmpMgr = require('../util/CmpMgr');
 
 function execute(parameters, stepExecution) {
@@ -32,11 +33,13 @@ function createOutputFile(parameters) {
     csv.writeNext(CsvUtils.buildHeader(describe));
 
     var customObjects = CustomObjectMgr.getAllCustomObjects(parameters.ObjectName);
-    while(customObjects.hasNext()) {
-        var newsletter = customObjects.next();
-        csv.writeNext(CsvUtils.buildRow(newsletter, describe, parameters));
+
+    var qol = Delta.customObjectQuery(parameters);
+    while(qol.hasNext()) {
+        var customObjects = qol.next();
+        csv.writeNext(CsvUtils.buildRow(customObjects, describe, parameters));
     };
-    customObjects.close();
+    qol.close();
     csv.close();
     fileWriter.close();
 }

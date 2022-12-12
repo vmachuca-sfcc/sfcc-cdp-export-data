@@ -1,18 +1,50 @@
 'use strict';
 
+const SystemObjectMgr = require('dw/object/SystemObjectMgr');
+const CustomObjectMgr = require('dw/object/CustomObjectMgr');
 const moment = require('moment/moment');
+
+function getStartDate() {
+    return moment().startOf("day").subtract(1, 'days').format('YYYY-MM-DDTHH:mm:ss.SSSSZ');
+}
+
+function getEndDate() {
+    return moment().endOf("day").subtract(1, 'days').format('YYYY-MM-DDTHH:mm:ss.SSSSZ');
+}
 
 exports.isPartOf = function(object, params) {
     try{
         // if delta is false all items will part of
         if(!params.Delta) return true;
-        const data = object['lastModified'];
+        const lastModified = object['lastModified'];
         // if the value is null or empty the item will be skipped
-        if(!data) return false;
+        if(!lastModified) return false;
         const yesterday =  moment().subtract(1, 'days');
-        const lastModified = moment();
-        return lastModified.isSame(yesterday, 'day');
+        return moment(lastModified).isSame(yesterday, 'day');
     } catch(error) {
         return false;
     }
 }
+
+exports.systemObjectQuery = function(objectName, params) {
+    if(!params.Delta) return SystemObjectMgr.getAllSystemObjects(objectName);
+    return SystemObjectMgr.querySystemObjects(
+        objectName,
+        'lastModified >= {0} AND lastModified <= {1}',
+        'lastModified ASC',
+        getStartDate(),
+        getEndDate()
+    );
+}
+
+exports.customObjectQuery = function(params) {
+    if(!params.Delta) return CustomObjectMgr.getAllCustomObjects(params.ObjectName);
+    return CustomObjectMgr.queryCustomObjects(
+        params.ObjectName,
+        'lastModified >= {0} AND lastModified <= {1}',
+        'lastModified ASC',
+        getStartDate(),
+        getEndDate()
+    );
+}
+

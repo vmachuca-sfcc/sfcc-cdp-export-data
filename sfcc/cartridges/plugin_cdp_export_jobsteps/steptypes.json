@@ -156,21 +156,15 @@
           }
         },
         {
-          "@type-id": "custom.CustomersXmlToCsv",
+          "@type-id": "custom.CustomersToCsv",
           "@supports-site-context":"true",
           "@supports-organization-context":"false",
-          "module": "plugin_cdp_export_jobsteps/cartridge/scripts/steps/CustomersXmlToCsv.js",
-          "description": "Convert customers data from xml to json",
+          "module": "plugin_cdp_export_jobsteps/cartridge/scripts/steps/CustomersToCsv.js",
+          "description": "Get delta customer list in csv file based on the last modified",
           "function": "execute",
           "timeout-in-seconds":"900",
           "parameters": {
             "parameter": [
-              {
-                "@name":"InputFileName",
-                "@type":"string",
-                "@required":"true",
-                "description":"Exported xml file name"
-              },
               {
                 "@name":"Delta",
                 "@type":"boolean",
