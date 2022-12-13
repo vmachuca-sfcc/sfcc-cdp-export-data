@@ -1,22 +1,7 @@
 'use strict';
 
 const File = require('dw/io/File');
-
-const FILE_CUSTOMER_PROFILE    = 'CustomerProfile';
-const FILE_CUSTOMER_ADDRESS    = 'CustomerAddress';
-const FILE_PRODUCT             = 'Product';
-const FILE_PRODUCT_PRICE_MODEL = 'ProductPriceModel';
-const FILE_ORDER               = 'Order';
-const FILE_ORDER_ITEM          = 'OrderItem';
-const FILE_ORDER_SHIPPING      = 'OrderShipping';
-
-const SYSTEM_INGEST_LIST = [
-    FILE_CUSTOMER_PROFILE,
-    FILE_CUSTOMER_ADDRESS,
-    FILE_PRODUCT,
-    FILE_ORDER,
-    FILE_ORDER_ITEM
-];
+const CsvType = require('../file/CsvType');
 
 function getRootFolder() {
     return File.IMPEX + File.SEPARATOR + 'src' + File.SEPARATOR + 'cdpWorkspace';
@@ -34,10 +19,14 @@ function createFolder() {
     if(!folder.exists()) folder.mkdir();
 }
 
-function purgeFolder () {
+function purgeFolder() {
     try {
         const folder = new File(getFolder());
-        if (folder.exists()) folder.remove();
+        if(!folder.exists()) return;
+        folder.listFiles().toArray().forEach(item => {
+            new File(item.fullPath).remove();
+        });
+        folder.remove();
     } catch(error) { }
 }
 
@@ -64,18 +53,8 @@ exports.remove = function(params, extension) {
 }
 
 exports.getIngestList = function(params) {
-    return SYSTEM_INGEST_LIST.concat(params.CustomObjects.split(','))
+    return CsvType.SYSTEM_INGEST_LIST.concat(params.CustomObjects.split(','))
 }
 
 exports.getFilePath = getFilePath;
 exports.getRootFolder = getRootFolder;
-
-exports.FILE_CUSTOMER_PROFILE    = FILE_CUSTOMER_PROFILE;
-exports.FILE_CUSTOMER_ADDRESS    = FILE_CUSTOMER_ADDRESS;
-exports.FILE_PRODUCT             = FILE_PRODUCT;
-exports.FILE_PRODUCT_PRICE_MODEL = FILE_PRODUCT_PRICE_MODEL;
-exports.FILE_ORDER               = FILE_ORDER;
-exports.FILE_ORDER_ITEM          = FILE_ORDER_ITEM;
-exports.FILE_ORDER_SHIPPING      = FILE_ORDER_SHIPPING;
-
-exports.COMMA_CHAR = ',';

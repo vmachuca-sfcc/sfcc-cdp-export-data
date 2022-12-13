@@ -7,9 +7,20 @@ const PRODUCT_PRICE_MODEL = { file: 'ProductPriceModel',  object: 'ProductPriceM
 const ORDER               = { file: 'Order',  object: 'Order' };
 const ORDER_ITEM          = { file: 'OrderItem',  object: 'OrderItem' };
 
+const SYSTEM_INGEST_LIST = [
+    CUSTOMER.file,
+    CUSTOMER_ADDRESS.file,
+    PRODUCT.file,
+    PRODUCT_PRICE_MODEL.file,
+    ORDER.file,
+    ORDER_ITEM.file
+];
+
 exports.CUSTOMER            = CUSTOMER;
 exports.CUSTOMER_ADDRESS    = CUSTOMER_ADDRESS;
 exports.PRODUCT             = PRODUCT;
 exports.PRODUCT_PRICE_MODEL = PRODUCT_PRICE_MODEL;
 exports.ORDER               = ORDER;
 exports.ORDER_ITEM          = ORDER_ITEM;
+
+exports.SYSTEM_INGEST_LIST  = SYSTEM_INGEST_LIST;

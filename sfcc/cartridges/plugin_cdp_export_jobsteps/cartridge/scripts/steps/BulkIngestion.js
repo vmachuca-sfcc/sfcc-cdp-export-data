@@ -3,13 +3,12 @@
 const Status = require('dw/system/Status');
 const Logger = require('dw/system/Logger');
 const File = require('dw/io/File');
-const FileReader = require('dw/io/FileReader');
 const AuthService = require('../service/AuthService');
 const CdpService = require('../service/CdpService');
 const FileUtils = require('../util/FileUtils');
 const JobHistory = require('../util/JobHistory');
 
-function execute(paramparamseters, stepExecution) {
+function execute(params, stepExecution) {
     try {
         if(params.TurnOff) return new Status(Status.OK);
         createBulkIngestion(params);
@@ -19,7 +18,6 @@ function execute(paramparamseters, stepExecution) {
     }
     return new Status(Status.OK);
 }
-
 function createBulkIngestion(parameters) {
     const credentials = AuthService.getCdpCredentials(parameters);
     cleanUpJobs(credentials);
