@@ -1,43 +1,30 @@
 'use strict';
 
-const LocalServiceRegistry = require('dw/svc/LocalServiceRegistry');
+const HTTPClient = require('dw/net/HTTPClient');
 
-function getToken(parameters) {
-    var svc = LocalServiceRegistry.createService("CDPDataIngestJob", {
-        createRequest: function(svc, args) {
-            svc.setRequestMethod('POST');
-            svc.addHeader('Content-Type', 'application/x-www-form-urlencoded');
-            svc.setURL(parameters.OrgUrl + '/services/oauth2/token');
+function getToken(params) {
+    var client = new HTTPClient();
+    client.open('POST', params.OrgUrl + '/services/oauth2/token');
+    client.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
 
-            var payload = "grant_type=password" +
-            "&client_id=" + parameters.ConsumerKey +
-            "&client_secret=" + parameters.ConsumerSecret +
-            "&username=" + parameters.Username +
-            "&password=" + parameters.Password;
-            return payload;
-        },
-        parseResponse: function (svc, result) {
-            return JSON.parse(result.text);
-        }
-    });
-    return svc.call().object.access_token;
+    var payload = "grant_type=password" +
+        "&client_id=" + params.ConsumerKey +
+        "&client_secret=" + params.ConsumerSecret +
+        "&username=" + params.Username +
+        "&password=" + params.Password;
+
+    client.send(payload);
+    return JSON.parse(client.text).access_token;
 }
 
-exports.getCdpCredentials = function(parameters) {
-    var svc = LocalServiceRegistry.createService("CDPDataIngestJob", {
-        createRequest: function(svc, args) {
-            svc.setRequestMethod('POST');
-            svc.addHeader('Content-Type', 'application/x-www-form-urlencoded');
-            svc.setURL(parameters.OrgUrl + '/services/a360/token');
+exports.getCdpCredentials = function(params) {
+    var client = new HTTPClient();
+    client.open('POST', params.OrgUrl + '/services/a360/token');
+    client.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
 
-            var payload = "grant_type=urn:salesforce:grant-type:external:cdp" +
-            "&subject_token_type=urn:ietf:params:oauth:token-type:access_token" +
-            "&subject_token=" + getToken(parameters);
-            return payload;
-        },
-        parseResponse: function (svc, result) {
-            return JSON.parse(result.text);
-        }
-    });
-    return svc.call().object;
+    var payload = "grant_type=urn:salesforce:grant-type:external:cdp" +
+        "&subject_token_type=urn:ietf:params:oauth:token-type:access_token" +
+        "&subject_token=" + getToken(params);
+    client.send(payload);
+    return JSON.parse(client.text);
 }

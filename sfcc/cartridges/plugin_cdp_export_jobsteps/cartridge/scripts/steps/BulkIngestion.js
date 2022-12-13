@@ -8,27 +8,28 @@ const CdpService = require('../service/CdpService');
 const FileUtils = require('../util/FileUtils');
 const JobHistory = require('../util/JobHistory');
 
-function execute(params, stepExecution) {
+function execute(params, stepExecution) {s
     try {
         if(params.TurnOff) return new Status(Status.OK);
         createBulkIngestion(params);
     } catch (error) {
+        var err = error;
         Logger.error(error.toString());
         return new Status(Status.ERROR, 'ERROR', error.toString());
     }
     return new Status(Status.OK);
 }
-function createBulkIngestion(parameters) {
-    const credentials = AuthService.getCdpCredentials(parameters);
+function createBulkIngestion(params) {
+    const credentials = AuthService.getCdpCredentials(params);
     cleanUpJobs(credentials);
 
-    FileUtils.getIngestList(parameters).forEach(item => {
-        const jobDetails = CdpService.createJob(credentials, item, parameters.CdpSource);
+    FileUtils.getIngestList(params).forEach(item => {
+        const jobDetails = CdpService.createJob(credentials, item, params.CdpSource);
         JobHistory.write(jobDetails.object.id);
 
         var file = new File(FileUtils.getFilePath(item, 'csv'));
-		CdpService.ingest(credentials, jobDetails.object, file);
-        CdpService.uploadComplete(credentials, jobDetails.object.id);
+		CdpService.ingest(credentials, jobDetails, file);
+        CdpService.uploadComplete(credentials, jobDetails.id);
     });
 }
 
