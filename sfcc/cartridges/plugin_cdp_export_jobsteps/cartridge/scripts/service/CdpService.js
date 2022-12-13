@@ -13,8 +13,8 @@ exports.createJob = function(credentials, object, source) {
         "operation":"upsert"
      };
     client.send(JSON.stringify(payload));
-    const response = JSON.stringify(client.text);
-    if(response.status == 'ERROR') {
+    const response = JSON.parse(client.text);
+    if(response.state != 'Open') {
         throw 'Error to create job to object: ' + object;
     }
     return response;
@@ -27,13 +27,13 @@ exports.ingest = function(credentials, jobDetails, file) {
     client.setRequestHeader('Authorization', 'Bearer ' + credentials.access_token);
     client.setTimeout(900000);
     client.send(file);
-    const response = JSON.stringify(client.text);
+    const response = JSON.parse(client.text);
     return response;
 }
 
 exports.uploadComplete = function(credentials, jobId) {
     var response = updateJob(credentials, jobId, 'PATCH', 'UploadComplete');
-    if(response.status == 'ERROR') {
+    if(response.state != 'UploadComplete') {
         throw 'Error to update job status: ' + jobId;
     }
     return response;

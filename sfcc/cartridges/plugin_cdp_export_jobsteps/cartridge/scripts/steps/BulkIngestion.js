@@ -8,7 +8,7 @@ const CdpService = require('../service/CdpService');
 const FileUtils = require('../util/FileUtils');
 const JobHistory = require('../util/JobHistory');
 
-function execute(params, stepExecution) {s
+function execute(params, stepExecution) {
     try {
         if(params.TurnOff) return new Status(Status.OK);
         createBulkIngestion(params);
@@ -25,7 +25,7 @@ function createBulkIngestion(params) {
 
     FileUtils.getIngestList(params).forEach(item => {
         const jobDetails = CdpService.createJob(credentials, item, params.CdpSource);
-        JobHistory.write(jobDetails.object.id);
+        JobHistory.write(jobDetails.id);
 
         var file = new File(FileUtils.getFilePath(item, 'csv'));
 		CdpService.ingest(credentials, jobDetails, file);
