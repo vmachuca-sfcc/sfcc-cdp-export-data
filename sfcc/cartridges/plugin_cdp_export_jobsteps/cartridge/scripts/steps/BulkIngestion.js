@@ -8,22 +8,19 @@ const AuthService = require('../service/AuthService');
 const CdpService = require('../service/CdpService');
 const FileUtils = require('../util/FileUtils');
 const JobHistory = require('../util/JobHistory');
-const CmpMgr = require('../util/CmpMgr');
 
-const TOTAL_LINES_BATCH = 300;
-
-function execute(parameters, stepExecution) {
+function execute(paramparamseters, stepExecution) {
     try {
-        if(CmpMgr.isTurnedOff(parameters)) return new Status(Status.OK);
-        createBulkIngest(parameters);
+        if(params.TurnOff) return new Status(Status.OK);
+        createBulkIngestion(params);
     } catch (error) {
-        Logger.error('An error has occurred: {0}', error.toString());
+        Logger.error(error.toString());
         return new Status(Status.ERROR, 'ERROR', error.toString());
     }
     return new Status(Status.OK);
 }
 
-function createBulkIngest(parameters) {
+function createBulkIngestion(parameters) {
     const credentials = AuthService.getCdpCredentials(parameters);
     cleanUpJobs(credentials);
 

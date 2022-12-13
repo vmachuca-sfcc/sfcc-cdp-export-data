@@ -5,23 +5,22 @@ const Logger = require('dw/system/Logger');
 const AuthService = require('../service/AuthService');
 const CdpService = require('../service/CdpService');
 const JobHistory = require('../util/JobHistory');
-const CmpMgr = require('../util/CmpMgr');
 
 const JOB_STATUS_FAILED = 'Failed';
 
-function execute(parameters, stepExecution) {
+function execute(params, stepExecution) {
     try {
-        if(CmpMgr.isTurnedOff(parameters)) return new Status(Status.OK);
-        monitoring(parameters);
+        if(params.TurnOff) return new Status(Status.OK);
+        monitoring(params);
     } catch (error) {
-        Logger.error('CDP Job failed: ', error.toString());
+        Logger.error(error.toString());
         return new Status(Status.ERROR, 'ERROR', error.toString());
     }
     return new Status(Status.OK);
 }
 
-function monitoring(parameters) {
-    const credentials = AuthService.getCdpCredentials(parameters);
+function monitoring(params) {
+    const credentials = AuthService.getCdpCredentials(params);
     JobHistory.read().forEach(jobId => {
         var state = CdpService.getState(credentials, jobId);
         if(state == JOB_STATUS_FAILED) {

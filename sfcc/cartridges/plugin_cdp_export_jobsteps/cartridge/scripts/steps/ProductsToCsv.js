@@ -2,51 +2,55 @@
 
 const Status = require('dw/system/Status');
 const Logger = require('dw/system/Logger');
-const File = require('dw/io/File');
-const FileWriter = require('dw/io/FileWriter');
-const CSVStreamWriter = require('dw/io/CSVStreamWriter');
 const ProductSearchModel = require('dw/catalog/ProductSearchModel');
-const Describer = require('../util/Describer');
-const CsvUtils = require('../util/CsvUtils');
-const FileUtils = require('../util/FileUtils');
-const Delta = require('../util/Delta');
-const CmpMgr = require('../util/CmpMgr');
 const ProductMap = require('../map/ProductMap');
+const Delta = require('../util/Delta');
+const CsvType = require('../file/CsvType');
+const CsvFile = require('../file/CsvFile');
 
-function execute(parameters, stepExecution) {
+const FIELD_PRODUCT_ID = 'productID';
+
+function execute(params, stepExecution) {
     try {
-        if(CmpMgr.isTurnedOff(parameters)) return new Status(Status.OK);
-        createOutputFile(parameters);
+        if(params.TurnOff) return new Status(Status.OK);
+        createOutputFile(params);
     } catch (error) {
-        Logger.error('An error has occurred: {0}', error.toString());
+        Logger.error(error.toString());
         return new Status(Status.ERROR, 'ERROR', error.toString());
     }
     return new Status(Status.OK);
 }
 
-function createOutputFile(parameters) {
-    var outputFile = FileUtils.getFilePath(FileUtils.FILE_PRODUCT, 'csv');
-    var fileWriter = new FileWriter(new File(outputFile));
-    var csv = new CSVStreamWriter(fileWriter);
-
-    var describe = Describer.getProduct();
-    csv.writeNext(ProductMap.check(CsvUtils.buildHeader(describe)));
+function createOutputFile(params) {
+    var csvProduct = new CsvFile(CsvType.PRODUCT, params);
+    var csvPriceModel = new CsvFile(CsvType.PRODUCT_PRICE_MODEL, params);
+    csvPriceModel.addRowFromList(ProductMap.priceModelFields);
 
     var psm = new ProductSearchModel();
     psm.setCategoryID('root');
     psm.search();
 
     var psh = psm.getProductSearchHits();
-    var count = 0;
     while(psh.hasNext()) {
-    //while(psh.hasNext() && count < 3) {
+        //product
         var product = psh.next().getProduct();
-        if(!Delta.isPartOf(product, parameters)) continue;
-        csv.writeNext(CsvUtils.buildRow(product, describe, parameters));
-        count++;
+        if(!Delta.isPartOf(product, params)) continue;
+        csvProduct.addRow(product);
+
+        //product price model
+        if(!product.priceModel) continue;
+        var priceModelRow = [];
+        ProductMap.priceModelFields.forEach(field => {
+            if(field == FIELD_PRODUCT_ID) {
+                priceModelRow.push(product.ID);
+                return;
+            }
+            priceModelRow.push(product.priceModel[field]);
+        });
+        csvPriceModel.addRowFromList(priceModelRow);
     };
-    csv.close();
-    fileWriter.close();
-}
+    csvProduct.close();
+    csvPriceModel.close();
+ }
 
 exports.execute = execute;

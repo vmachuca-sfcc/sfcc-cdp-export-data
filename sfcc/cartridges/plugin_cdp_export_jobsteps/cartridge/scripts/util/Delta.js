@@ -1,5 +1,6 @@
 'use strict';
 
+const OrderMgr = require('dw/order/OrderMgr');
 const SystemObjectMgr = require('dw/object/SystemObjectMgr');
 const CustomObjectMgr = require('dw/object/CustomObjectMgr');
 const moment = require('moment/moment');
@@ -48,3 +49,17 @@ exports.customObjectQuery = function(params) {
     );
 }
 
+exports.orderQuery = function(params) {
+    if(!params.Delta) {
+        return OrderMgr.searchOrders(
+            '',
+            'lastModified ASC',
+        );
+    }
+    return OrderMgr.searchOrders(
+        'lastModified >= {0} AND lastModified <= {1}',
+        'lastModified ASC',
+        getStartDate(),
+        getEndDate()
+    );
+}

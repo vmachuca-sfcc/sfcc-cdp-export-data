@@ -213,6 +213,12 @@
                 "@type":"boolean",
                 "@required":"false",
                 "description":"Skip the extraction process"
+              },
+              {
+                "@name":"FieldMap",
+                "@type":"string",
+                "@required":"false",
+                "description":"To replace the original field columns name in the csv file"
               }
             ]
           },

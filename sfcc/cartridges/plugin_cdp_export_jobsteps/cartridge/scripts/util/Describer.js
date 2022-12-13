@@ -3,24 +3,13 @@
 const SystemObjectMgr = require('dw/object/SystemObjectMgr');
 const CustomObjectMgr = require('dw/object/CustomObjectMgr');
 
-exports.getProfile = function() {
-    return SystemObjectMgr.describe('Profile');
-}
-
-exports.getCustomerAddress = function() {
-    return SystemObjectMgr.describe('CustomerAddress');
-}
-
-exports.getOrder = function() {
-    return SystemObjectMgr.describe('Order');
-}
-
-exports.getProduct = function() {
-    return SystemObjectMgr.describe('Product');
-}
-
-exports.getCustom = function(name) {
-    return CustomObjectMgr.describe(name);
+exports.get = function(name) {
+    try {
+        var desc = SystemObjectMgr.describe(name);
+        return desc != null ? desc : CustomObjectMgr.describe(name);
+    } catch(error) {
+        return null;
+    }
 }
 
 exports.getCustomFieldsName = function(describe) {
@@ -29,4 +18,12 @@ exports.getCustomFieldsName = function(describe) {
         if(!def.system) fields.push(def.ID);
     });
     return fields;
+}
+
+exports.getByName = function(describe, field) {
+    var result = undefined;
+    describe.attributeDefinitions.toArray().forEach((def) => {
+        if(def.ID == field) result = def;
+    });
+    return result;
 }

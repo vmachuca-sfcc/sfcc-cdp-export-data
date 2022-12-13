@@ -3,65 +3,52 @@
 const System = require('dw/system/System');
 const Status = require('dw/system/Status');
 const Logger = require('dw/system/Logger');
-const File = require('dw/io/File');
-const FileWriter = require('dw/io/FileWriter');
-const CSVStreamWriter = require('dw/io/CSVStreamWriter');
 const Order = require('dw/order/Order');
 const OrderMgr = require('dw/order/OrderMgr');
-const CsvUtils = require('../util/CsvUtils');
-const FileUtils = require('../util/FileUtils');
-const Describer = require('../util/Describer');
-const CmpMgr = require('../util/CmpMgr');
 const Delta = require('../util/Delta');
 const OrderMap = require('../map/OrderMap');
+const Describer = require('../util/Describer');
+const CsvUtils = require('../util/CsvUtils');
+const CsvType = require('../file/CsvType');
+const CsvFile = require('../file/CsvFile');
 
-//TODO: Check Query
-const query = "exportAfter<{0}";
+const FIELD_ORDER_NO       = 'orderNo';
+const FIELD_STATUS         = 'status';
+const FIELD_PAYMENT_STATUS = 'paymentStatus';
+const FIELD_CHANNEL_TYPE   = 'channelType';
+const FIELD_CONF_STATUS    = 'confirmationStatus';
 
-function execute(parameters, stepExecution) {
+function execute(params, stepExecution) {
     try {
-        if(CmpMgr.isTurnedOff(parameters)) return new Status(Status.OK);
-        createOutputFile(parameters);
+        if(params.TurnOff) return new Status(Status.OK);
+        createOutputFile(params);
     } catch (error) {
-        Logger.error('An error has occurred: {0}', error.toString());
+        Logger.error(error.toString());
         return new Status(Status.ERROR, 'ERROR', error.toString());
     }
     return new Status(Status.OK);
 }
 
-function createOutputFile(parameters) {
-    //var order
-    var fileWriter = new FileWriter(new File(FileUtils.getFilePath(FileUtils.FILE_ORDER, 'csv')));
-    var csv = new CSVStreamWriter(fileWriter);
-    var customFields = Describer.getCustomFieldsName(Describer.getOrder());
-    csv.writeNext(OrderMap.orderFields.concat(customFields));
+function createOutputFile(params) {
+    var csvOrder = new CsvFile(CsvType.ORDER, params, true);
+    var csvOrderItem = new CsvFile(CsvType.ORDER_ITEM, params, true);
 
-    //var order items
-    var fileWriterLineItem = new FileWriter(new File(FileUtils.getFilePath(FileUtils.FILE_ORDER_ITEM, 'csv')));
-    var csvOrderItems = new CSVStreamWriter(fileWriterLineItem);
-    csvOrderItems.writeNext(OrderMap.lineItemsFields);
+    var customFields = Describer.getCustomFieldsName(csvOrder.describe);
+    csvOrder.addRowFromList(OrderMap.orderFields.concat(customFields));
+    csvOrderItem.addRowFromList(OrderMap.lineItemsFields);
 
-    //var shipping order
-    var fileWriterShipping = new FileWriter(new File(FileUtils.getFilePath(FileUtils.FILE_ORDER_SHIPPING, 'csv')));
-    var csvShipping = new CSVStreamWriter(fileWriterShipping);
-    csvShipping.writeNext(OrderMap.shippingFields.concat(OrderMap.shippingAddressFields));
-
-    //query
-    var orderIterator = OrderMgr.searchOrders(
-        query,
-        null,
-        System.getCalendar().getTime()
-    );
-
-    while(orderIterator.hasNext()) {
-        var order = orderIterator.next();
-        //if(Delta.skip(order, parameters)) continue;
-
+    var oql = Delta.orderQuery(params);
+    while(oql.hasNext()) {
+        var order = oql.next();
         //order
         var row = [];
         OrderMap.orderFields.forEach(field => {
-            if(field == 'status' || field == 'paymentStatus' ||
-                field == 'channelType' || field == 'confirmationStatus') {
+            if(
+                field == FIELD_STATUS ||
+                field == FIELD_PAYMENT_STATUS||
+                field == FIELD_CHANNEL_TYPE ||
+                field == FIELD_CONF_STATUS
+            ) {
                 row.push(CsvUtils.getDisplayValue(order, field));
                 return;
             }
@@ -70,49 +57,25 @@ function createOutputFile(parameters) {
         customFields.forEach(field => {
             row.push(CsvUtils.getCustomValue(order, field));
         });
-        csv.writeNext(row);
+        csvOrder.addRowFromList(row);
 
-        //order items
+        //order-item
         order.allProductLineItems.toArray().forEach(item => {
             var row = [];
             OrderMap.lineItemsFields.forEach(field => {
-                if(field == 'orderNo') {
+                if(field == FIELD_ORDER_NO) {
                     row.push(order.orderNo);
                     return;
                 }
-                row.push(CsvUtils.getValue(item, field));
+                var def = Describer.getByName(csvOrder.describe, field);
+                row.push(CsvUtils.getValue(item, field, def));
             });
-            csvOrderItems.writeNext(row);
-        });
-
-        //shipping order
-        order.shipments.toArray().forEach(item => {
-            var row = [];
-            OrderMap.shippingFields.forEach(field => {
-                if(field == 'orderNo') {
-                    row.push(order.orderNo);
-                    return;
-                }
-                if(field == 'shippingMethod' || field == 'shippingStatus' || field == 'businessType' ||
-                   field == 'exportStatus' || field == 'replaceCode') {
-                    row.push(CsvUtils.getDisplayName(item, field));
-                    return;
-                }
-                row.push(CsvUtils.getValue(item, field));
-            });
-            OrderMap.shippingAddressFields.forEach(field => {
-                row.push(CsvUtils.getValue(item.shippingAddress, field));
-            });
-            csvShipping.writeNext(row);
+            csvOrderItem.addRowFromList(row);
         });
     }
-
-    csv.close();
-    csvOrderItems.close();
-    csvShipping.close();
-    fileWriter.close();
-    fileWriterLineItem.close();
-    fileWriterShipping.close();
+    csvOrder.close();
+    csvOrderItem.close();
 }
+
 
 exports.execute = execute;

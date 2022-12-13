@@ -2,46 +2,35 @@
 
 const Status = require('dw/system/Status');
 const Logger = require('dw/system/Logger');
-const File = require('dw/io/File');
-const FileWriter = require('dw/io/FileWriter');
-const CSVStreamWriter = require('dw/io/CSVStreamWriter');
-const CustomObjectMgr = require('dw/object/CustomObjectMgr');
-const Describer = require('../util/Describer');
-const CsvUtils = require('../util/CsvUtils');
-const FileUtils = require('../util/FileUtils');
 const StringUtils = require('../util/StringUtils');
 const Delta = require('../util/Delta');
-const CmpMgr = require('../util/CmpMgr');
+const CsvFile = require('../file/CsvFile');
 
-function execute(parameters, stepExecution) {
+function execute(params, stepExecution) {
     try {
-        if(CmpMgr.isTurnedOff(parameters)) return new Status(Status.OK);
-        createOutputFile(parameters);
+        if(params.TurnOff) return new Status(Status.OK);
+        createOutputFile(params);
     } catch (error) {
-        Logger.error('An error has occurred: {0}', error.toString());
+        Logger.error(error.toString());
         return new Status(Status.ERROR, 'ERROR', error.toString());
     }
     return new Status(Status.OK);
 }
 
-function createOutputFile(parameters) {
-    var outputFile = FileUtils.getFilePath(StringUtils.capitalizeFirstLetter(parameters.ObjectName), 'csv');
-    var fileWriter = new FileWriter(new File(outputFile));
-    var csv = new CSVStreamWriter(fileWriter);
-
-    var describe = Describer.getCustom(parameters.ObjectName);
-    csv.writeNext(CsvUtils.buildHeader(describe));
-
-    var customObjects = CustomObjectMgr.getAllCustomObjects(parameters.ObjectName);
-
-    var qol = Delta.customObjectQuery(parameters);
-    while(qol.hasNext()) {
-        var customObjects = qol.next();
-        csv.writeNext(CsvUtils.buildRow(customObjects, describe, parameters));
-    };
-    qol.close();
-    csv.close();
-    fileWriter.close();
-}
+function createOutputFile(params) {
+    var csv = new CsvFile(
+        {
+            file: StringUtils.capFirstLetter(params.ObjectName),
+            object: params.ObjectName
+        },
+        params
+    );
+     var qol = Delta.customObjectQuery(params);
+     while(qol.hasNext()) {
+        var customObject = qol.next();
+        csv.addRow(customObject);
+     };
+     csv.close();
+ }
 
 exports.execute = execute;

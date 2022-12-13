@@ -3,24 +3,22 @@
 const JsonUtils = require('./JsonUtils');
 const StringUtils = require('./StringUtils');
 const ObjAttrDef = require('dw/object/ObjectAttributeDefinition');
+const moment = require('moment/moment');
 
 exports.buildHeader = function(describer) {
     var header = [];
     describer.attributeDefinitions.toArray().forEach((def) => {
-        header.push(def.ID); //def.displayName
+        header.push(def.ID);
     });
-    //return ['UUID'].concat(header);
     return header;
 }
 
 exports.buildRow = function(object, describer, parameters) {
     var row = [];
-    //row.push(StringUtils.uuidv4());
     describer.attributeDefinitions.toArray().forEach((def) => {
         const value = def.system
-            ? getValue(object, def.ID)
-            : getValue(object.custom, def.ID)
-
+            ? getValue(object, def.ID, def)
+            : getValue(object.custom, def.ID, def)
         //check enum
         if(
             def.valueTypeCode == ObjAttrDef.VALUE_TYPE_ENUM_OF_INT ||
@@ -28,20 +26,6 @@ exports.buildRow = function(object, describer, parameters) {
         ) {
             try{
                 row.push(value.displayName);
-                return;
-            } catch (error) {
-                row.push('');
-                return;
-            }
-        }
-
-        //check date
-        if(
-            def.valueTypeCode == ObjAttrDef.VALUE_TYPE_DATE ||
-            def.valueTypeCode == ObjAttrDef.VALUE_TYPE_DATETIME
-        ) {
-            try{
-                row.push(String(value));
                 return;
             } catch (error) {
                 row.push('');
@@ -63,15 +47,20 @@ exports.buildRow = function(object, describer, parameters) {
                 return;
             }
         }
-        var noia = value ? StringUtils.fix(value) : 'sss';
-        var lol = StringUtils.fix(value);
         row.push(value ? StringUtils.fix(value) : '');
     });
     return row;
 }
 
-function getValue(object, property) {
+function getValue(object, property, def) {
     try {
+        if(
+            def != undefined &&
+            (def.valueTypeCode == ObjAttrDef.VALUE_TYPE_DATE ||
+             def.valueTypeCode == ObjAttrDef.VALUE_TYPE_DATETIME)
+        ) {
+            return dateFormat(object[property]);
+        }
         return object[property];
     } catch (error) {
         return '';
@@ -99,6 +88,14 @@ function getDisplayName(object, property) {
         return object[property]['displayName'];
     } catch (error) {
         return getValue(object, property);
+    }
+}
+
+function dateFormat(value) {
+    try{
+        return moment(value).format('YYYY-MM-DDTHH:mm:ssZ');
+    } catch (error) {
+        return '';
     }
 }
 
