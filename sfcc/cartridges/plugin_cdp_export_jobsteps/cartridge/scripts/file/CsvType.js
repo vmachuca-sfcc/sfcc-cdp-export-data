@@ -16,6 +16,15 @@ const SYSTEM_INGEST_LIST = [
     ORDER_ITEM.file
 ];
 
+const SYSTEM_OBJ_INGEST_LIST = [
+    CUSTOMER.object,
+    CUSTOMER_ADDRESS.object,
+    PRODUCT.object,
+    PRODUCT_PRICE_MODEL.object,
+    ORDER.object,
+    ORDER_ITEM.object
+];
+
 exports.CUSTOMER            = CUSTOMER;
 exports.CUSTOMER_ADDRESS    = CUSTOMER_ADDRESS;
 exports.PRODUCT             = PRODUCT;
@@ -24,3 +33,14 @@ exports.ORDER               = ORDER;
 exports.ORDER_ITEM          = ORDER_ITEM;
 
 exports.SYSTEM_INGEST_LIST  = SYSTEM_INGEST_LIST;
+
+exports.isValidObject = function(name) {
+    var isValid = false;
+    SYSTEM_OBJ_INGEST_LIST.forEach(item => {
+        if(item == name) {
+            isValid = true;
+            return;
+        }
+    });
+    return isValid;
+}

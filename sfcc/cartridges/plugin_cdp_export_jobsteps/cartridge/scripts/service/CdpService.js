@@ -1,6 +1,7 @@
 'use strict';
 
 const HTTPClient = require('dw/net/HTTPClient');
+const CsvType = require('../file/CsvType');
 
 exports.createJob = function(credentials, object, source) {
     var client = new HTTPClient();
@@ -13,11 +14,7 @@ exports.createJob = function(credentials, object, source) {
         "operation":"upsert"
      };
     client.send(JSON.stringify(payload));
-    const response = JSON.parse(client.text);
-    if(response.state != 'Open') {
-        throw 'Error to create job to object: ' + object;
-    }
-    return response;
+    return JSON.parse(client.text);
 }
 
 exports.ingest = function(credentials, jobDetails, file) {
@@ -44,9 +41,18 @@ exports.getState = function(credentials, jobId) {
     return response.hasOwnProperty('state') ? response.state : null;
 }
 
-exports.cleanUp = function(credentials, jobId) {
+function cleanUp(credentials, jobId) {
     updateJob(credentials, jobId, 'PATCH', 'Aborted');
     updateJob(credentials, jobId, 'DELETE');
+}
+exports.cleanUp = cleanUp;
+
+exports.cleanUpAll = function(credentials) {
+    var jobs = getJobs(credentials);
+    if(!jobs.hasOwnProperty('data')) return;
+    jobs.data.forEach(job => {
+        cleanUp(credentials, job.id);
+    });
 }
 
 function updateJob(credentials, jobId, operation, state) {
@@ -59,5 +65,14 @@ function updateJob(credentials, jobId, operation, state) {
         ? client.send(JSON.stringify({ "state": state }))
         : client.send();
 
+    return JSON.parse(client.text);
+}
+
+function getJobs(credentials) {
+    var client = new HTTPClient();
+    client.open('GET', 'https://' + credentials.instance_url + '/api/v1/ingest/jobs');
+    client.setRequestHeader('Content-Type', 'application/json');
+    client.setRequestHeader('Authorization', 'Bearer ' + credentials.access_token);
+    client.send();
     return JSON.parse(client.text);
 }

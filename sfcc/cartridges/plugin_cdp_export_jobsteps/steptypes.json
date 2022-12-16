@@ -277,7 +277,7 @@
           "@supports-site-context":"true",
           "@supports-organization-context":"false",
           "module": "plugin_cdp_export_jobsteps/cartridge/scripts/steps/CustomObjectToCsv.js",
-          "description": "Get delta newsletter in csv file",
+          "description": "Get delta data from custom object to a csv file",
           "function": "execute",
           "timeout-in-seconds":"900",
           "parameters": {
@@ -288,6 +288,43 @@
                 "@required":"true",
                 "description":"Custom object name"
               },
+              {
+                "@name":"Delta",
+                "@type":"boolean",
+                "@required":"false",
+                "description":"Get delta data"
+              },
+              {
+                "@name":"TurnOff",
+                "@type":"boolean",
+                "@required":"false",
+                "description":"Skip the extraction process"
+              }
+            ]
+          },
+          "status-codes": {
+            "status": [
+              {
+                "@code": "ERROR",
+                "description": "Used when an error occurred."
+              },
+              {
+                "@code": "OK",
+                "description": "Used when everything went well."
+              }
+            ]
+          }
+        },
+        {
+          "@type-id": "custom.BackInStockToCsv",
+          "@supports-site-context":"true",
+          "@supports-organization-context":"false",
+          "module": "plugin_cdp_export_jobsteps/cartridge/scripts/steps/BackInStockToCsv.js",
+          "description": "Get delta data to back in stock object (custom to Tramontina)",
+          "function": "execute",
+          "timeout-in-seconds":"900",
+          "parameters": {
+            "parameter": [
               {
                 "@name":"Delta",
                 "@type":"boolean",

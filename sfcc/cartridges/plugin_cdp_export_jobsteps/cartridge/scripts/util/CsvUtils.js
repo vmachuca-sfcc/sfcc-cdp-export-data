@@ -63,7 +63,7 @@ function getValue(object, property, def) {
         }
         return object[property];
     } catch (error) {
-        return '';
+        return getCustomValue(object, property);
     }
 }
 

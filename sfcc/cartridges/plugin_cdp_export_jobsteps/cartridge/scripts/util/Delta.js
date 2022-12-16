@@ -38,10 +38,11 @@ exports.systemObjectQuery = function(objectName, params) {
     );
 }
 
-exports.customObjectQuery = function(params) {
-    if(!params.Delta) return CustomObjectMgr.getAllCustomObjects(params.ObjectName);
+exports.customObjectQuery = function(params, objectName) {
+    var objName = objectName != undefined ? objectName : params.ObjectName;
+    if(!params.Delta) return CustomObjectMgr.getAllCustomObjects(objName);
     return CustomObjectMgr.queryCustomObjects(
-        params.ObjectName,
+        objName,
         'lastModified >= {0} AND lastModified <= {1}',
         'lastModified ASC',
         getStartDate(),
