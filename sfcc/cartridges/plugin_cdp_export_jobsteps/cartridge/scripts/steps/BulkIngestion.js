@@ -13,7 +13,7 @@ function execute(params, stepExecution) {
         if(params.TurnOff) return new Status(Status.OK);
         createBulkIngestion(params);
     } catch (error) {
-        var err = error;
+        Logger.error(error.stack);
         Logger.error(error.toString());
         return new Status(Status.ERROR, 'ERROR', error.toString());
     }

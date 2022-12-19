@@ -15,6 +15,7 @@ function execute(params, stepExecution) {
         if(params.TurnOff) return new Status(Status.OK);
         createOutputFile(params);
     } catch (error) {
+        Logger.error(error.stack);
         Logger.error(error.toString());
         return new Status(Status.ERROR, 'ERROR', error.toString());
     }
