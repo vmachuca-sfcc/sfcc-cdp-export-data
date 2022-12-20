@@ -38,7 +38,7 @@ exports.uploadComplete = function(credentials, jobId) {
 
 exports.getState = function(credentials, jobId) {
     var response = updateJob(credentials, jobId, 'GET');
-    return response.hasOwnProperty('state') ? response.state : null;
+    return response && response.hasOwnProperty('state') ? response.state : null;
 }
 
 function cleanUp(credentials, jobId) {
