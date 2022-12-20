@@ -49,7 +49,12 @@ function createOutputFile(params) {
         if(cds) {
             cds.forEach(cd => {
                 row = [];
-                var data = JSON.parse(cd);
+                var data = null;
+                try {
+                    data = JSON.parse(cd);
+                } catch(e) {
+                    Logger.error(cd);
+                }
                 fieldMap.forEach(field => {
                     if(field == 'nome' || field == 'email') {
                         row.push(data && data.hasOwnProperty(field) ? data[field] : '');
