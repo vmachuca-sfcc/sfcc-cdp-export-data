@@ -51,6 +51,7 @@ exports.cleanUpAll = function(credentials) {
     var jobs = getJobs(credentials);
     if(!jobs.hasOwnProperty('data')) return;
     jobs.data.forEach(job => {
+        if(!job.hasOwnProperty('id')) return;
         cleanUp(credentials, job.id);
     });
 }
