@@ -60,7 +60,7 @@ exports.lineItemsFields = [
     "productID",
     "productName",
     "quantityValue",
-    "adjustedGrossPrice",
+    "adjustedPrice",
     "adjustedNetPrice",
     "adjustedGrossPrice",
     "adjustedTax",
