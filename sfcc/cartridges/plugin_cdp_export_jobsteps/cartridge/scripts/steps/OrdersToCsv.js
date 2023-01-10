@@ -13,6 +13,7 @@ const CsvType = require('../file/CsvType');
 const CsvFile = require('../file/CsvFile');
 
 const FIELD_ORDER_NO       = 'orderNo';
+const FIELD_CUSTOMER_NO    = 'customerNo';
 const FIELD_STATUS         = 'status';
 const FIELD_PAYMENT_STATUS = 'paymentStatus';
 const FIELD_CHANNEL_TYPE   = 'channelType';
@@ -33,10 +34,12 @@ function execute(params, stepExecution) {
 function createOutputFile(params) {
     var csvOrder = new CsvFile(CsvType.ORDER, params, true);
     var csvOrderItem = new CsvFile(CsvType.ORDER_ITEM, params, true);
+    var csvOrderCoupon = new CsvFile(CsvType.ORDER_COUPON, params, true);
 
     var customFields = Describer.getCustomFieldsName(csvOrder.describe);
     csvOrder.addRowFromList(OrderMap.orderFields.concat(customFields));
     csvOrderItem.addRowFromList(OrderMap.lineItemsFields);
+    csvOrderCoupon.addRowFromList(OrderMap.couponFields);
 
     var oql = Delta.orderQuery(params);
     while(oql.hasNext()) {
@@ -73,10 +76,28 @@ function createOutputFile(params) {
             });
             csvOrderItem.addRowFromList(row);
         });
+
+        //order-coupon
+        order.couponLineItems.toArray().forEach(item => {
+            var row = [];
+            OrderMap.couponFields.forEach(field => {
+                if(field == FIELD_ORDER_NO) {
+                    row.push(order.orderNo);
+                    return;
+                }
+                if(field == FIELD_CUSTOMER_NO) {
+                    row.push(order.customerNo);
+                    return;
+                }
+                var def = Describer.getByName(csvOrder.describe, field);
+                row.push(CsvUtils.getValue(item, field, def));
+            });
+            csvOrderCoupon.addRowFromList(row);
+        });
     }
     csvOrder.close();
     csvOrderItem.close();
+    csvOrderCoupon.close();
 }
-
 
 exports.execute = execute;

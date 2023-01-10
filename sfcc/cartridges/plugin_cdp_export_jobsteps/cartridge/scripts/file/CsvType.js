@@ -6,6 +6,7 @@ const PRODUCT             = { file: 'Product',  object: 'Product' };
 const PRODUCT_PRICE_MODEL = { file: 'ProductPriceModel',  object: 'ProductPriceModel' };
 const ORDER               = { file: 'Order',  object: 'Order' };
 const ORDER_ITEM          = { file: 'OrderItem',  object: 'OrderItem' };
+const ORDER_COUPON        = { file: 'OrderCoupon',  object: 'OrderCoupon' };
 
 const SYSTEM_INGEST_LIST = [
     CUSTOMER.file,
@@ -13,7 +14,8 @@ const SYSTEM_INGEST_LIST = [
     PRODUCT.file,
     PRODUCT_PRICE_MODEL.file,
     ORDER.file,
-    ORDER_ITEM.file
+    ORDER_ITEM.file,
+    ORDER_COUPON.file
 ];
 
 const SYSTEM_OBJ_INGEST_LIST = [
@@ -22,7 +24,8 @@ const SYSTEM_OBJ_INGEST_LIST = [
     PRODUCT.object,
     PRODUCT_PRICE_MODEL.object,
     ORDER.object,
-    ORDER_ITEM.object
+    ORDER_ITEM.object,
+    ORDER_COUPON.object
 ];
 
 exports.CUSTOMER            = CUSTOMER;
@@ -31,6 +34,7 @@ exports.PRODUCT             = PRODUCT;
 exports.PRODUCT_PRICE_MODEL = PRODUCT_PRICE_MODEL;
 exports.ORDER               = ORDER;
 exports.ORDER_ITEM          = ORDER_ITEM;
+exports.ORDER_COUPON        = ORDER_COUPON;
 
 exports.SYSTEM_INGEST_LIST  = SYSTEM_INGEST_LIST;
 

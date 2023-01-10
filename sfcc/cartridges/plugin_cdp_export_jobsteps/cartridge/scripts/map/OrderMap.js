@@ -100,3 +100,15 @@ exports.shippingAddressFields = [
     "countryCode",
     "postalCode"
 ];
+
+exports.couponFields = [
+    "UUID",
+    "orderNo",
+    "customerNo",
+    "couponCode",
+    "statusCode",
+    "valid",
+    "applied",
+    "basedOnCampaign",
+    "lastModified"
+];
