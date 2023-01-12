@@ -6,9 +6,15 @@ const FileWriter = require('dw/io/FileWriter');
 const FileUtils = require('./FileUtils');
 
 const FILE_JOB_HISTORY = 'job_ids.txt';
+const FILE_JOB_HISTORY_EXEC = 'job.history';
 
 function getFile() {
     const path = FileUtils.getRootFolder() + '/' + FILE_JOB_HISTORY;
+    return new File(path);
+}
+
+function getFileExec() {
+    const path = FileUtils.getRootFolder() + '/' + FILE_JOB_HISTORY_EXEC;
     return new File(path);
 }
 
@@ -30,9 +36,24 @@ exports.read = function() {
     return items;
 }
 
+exports.logExecution = function(jobId) {
+    var file = getFileExec();
+    if(file.exists()) file.remove();
+    var fw = new FileWriter(getFileExec(), 'UTF-8', true);
+    fw.writeLine(jobId);
+    fw.close();
+}
+
+exports.getLastExecution = function() {
+    var file = getFileExec();
+    if(!file.exists()) return null;
+    return file.lastModified();
+}
+
 exports.purge = function() {
     var file = getFile();
     if(file.exists()) file.remove();
 }
 
 exports.FILE_JOB_HISTORY = FILE_JOB_HISTORY;
+exports.FILE_JOB_HISTORY_EXEC = FILE_JOB_HISTORY_EXEC;

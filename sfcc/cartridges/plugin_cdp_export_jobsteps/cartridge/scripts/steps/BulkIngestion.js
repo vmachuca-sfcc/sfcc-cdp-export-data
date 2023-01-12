@@ -10,13 +10,17 @@ const JobHistory = require('../util/JobHistory');
 
 function execute(params, stepExecution) {
     try {
-        if(params.TurnOff) return new Status(Status.OK);
+        if(params.SkipData) {
+            JobHistory.logExecution(stepExecution.jobExecution.ID);
+            return new Status(Status.OK);
+        }
         createBulkIngestion(params);
     } catch (error) {
         Logger.error(error.stack);
         Logger.error(error.toString());
         return new Status(Status.ERROR, 'ERROR', error.toString());
     }
+    JobHistory.logExecution(stepExecution.jobExecution.ID);
     return new Status(Status.OK);
 }
 function createBulkIngestion(params) {

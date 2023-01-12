@@ -4,31 +4,42 @@ const OrderMgr = require('dw/order/OrderMgr');
 const SystemObjectMgr = require('dw/object/SystemObjectMgr');
 const CustomObjectMgr = require('dw/object/CustomObjectMgr');
 const moment = require('moment/moment');
+const JobHistory = require('./JobHistory');
+
+function hasHistory() {
+    return JobHistory.getLastExecution() != null;
+}
 
 function getStartDate() {
-    return moment().startOf("day").subtract(1, 'days').format('YYYY-MM-DDTHH:mm:ss.SSSSZ');
+    var lol = moment(JobHistory.getLastExecution());
+    return moment(JobHistory.getLastExecution()).format('YYYY-MM-DDTHH:mm:ss.SSSSZ');
 }
 
 function getEndDate() {
-    return moment().endOf("day").subtract(1, 'days').format('YYYY-MM-DDTHH:mm:ss.SSSSZ');
+    return moment().endOf("day").format('YYYY-MM-DDTHH:mm:ss.SSSSZ');
 }
 
 exports.isPartOf = function(object, params) {
     try{
-        // if delta is false all items will part of
-        if(!params.Delta) return true;
-        const lastModified = object['lastModified'];
+        // if ForceFullData is true or theres not history all items will part of
+        if(params.ForceFullData || !hasHistory()) return true;
+
         // if the value is null or empty the item will be skipped
+        const lastModified = object['lastModified'];
         if(!lastModified) return false;
-        const yesterday =  moment().subtract(1, 'days');
-        return moment(lastModified).isSame(yesterday, 'day');
+
+        // if the lastModified is the same of after the lastExecution of the job
+        const lastExecution = moment(JobHistory.getLastExecution());
+        return moment(lastModified).isSameOrAfter(lastExecution);
     } catch(error) {
         return false;
     }
 }
 
 exports.systemObjectQuery = function(objectName, params) {
-    if(!params.Delta) return SystemObjectMgr.getAllSystemObjects(objectName);
+    if(params.ForceFullData || !hasHistory())
+        return SystemObjectMgr.getAllSystemObjects(objectName);
+
     return SystemObjectMgr.querySystemObjects(
         objectName,
         'lastModified >= {0} AND lastModified <= {1}',
@@ -40,7 +51,10 @@ exports.systemObjectQuery = function(objectName, params) {
 
 exports.customObjectQuery = function(params, objectName) {
     var objName = objectName != undefined ? objectName : params.ObjectName;
-    if(!params.Delta) return CustomObjectMgr.getAllCustomObjects(objName);
+
+    if(params.ForceFullData || !hasHistory())
+        return CustomObjectMgr.getAllCustomObjects(objName);
+
     return CustomObjectMgr.queryCustomObjects(
         objName,
         'lastModified >= {0} AND lastModified <= {1}',
@@ -51,7 +65,7 @@ exports.customObjectQuery = function(params, objectName) {
 }
 
 exports.orderQuery = function(params) {
-    if(!params.Delta) {
+    if(params.ForceFullData || !hasHistory()) {
         return OrderMgr.searchOrders(
             '',
             'lastModified ASC',

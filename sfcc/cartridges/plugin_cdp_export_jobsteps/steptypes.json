@@ -74,7 +74,7 @@
                 "description":"Custom objects names to be ingest to CDP. The values must be separated by comma"
               },
               {
-                "@name":"TurnOff",
+                "@name":"SkipData",
                 "@type":"boolean",
                 "@required":"false",
                 "description":"Skip the extraction process"
@@ -135,7 +135,7 @@
                 "description":"ConsumerSecret"
               },
               {
-                "@name":"TurnOff",
+                "@name":"SkipData",
                 "@type":"boolean",
                 "@required":"false",
                 "description":"Skip the extraction process"
@@ -160,19 +160,19 @@
           "@supports-site-context":"true",
           "@supports-organization-context":"false",
           "module": "plugin_cdp_export_jobsteps/cartridge/scripts/steps/CustomersToCsv.js",
-          "description": "Get delta customer list in csv file based on the last modified",
+          "description": "Get ForceFullData customer list in csv file based on the last modified",
           "function": "execute",
           "timeout-in-seconds":"900",
           "parameters": {
             "parameter": [
               {
-                "@name":"Delta",
+                "@name":"ForceFullData",
                 "@type":"boolean",
                 "@required":"false",
-                "description":"Get delta data"
+                "description":"Force full data"
               },
               {
-                "@name":"TurnOff",
+                "@name":"SkipData",
                 "@type":"boolean",
                 "@required":"false",
                 "description":"Skip the extraction process"
@@ -197,19 +197,19 @@
           "@supports-site-context":"true",
           "@supports-organization-context":"false",
           "module": "plugin_cdp_export_jobsteps/cartridge/scripts/steps/ProductsToCsv.js",
-          "description": "Get delta product list in csv file based on the last modified",
+          "description": "Get ForceFullData product list in csv file based on the last modified",
           "function": "execute",
           "timeout-in-seconds":"900",
           "parameters": {
             "parameter": [
               {
-                "@name":"Delta",
+                "@name":"ForceFullData",
                 "@type":"boolean",
                 "@required":"false",
-                "description":"Get delta data"
+                "description":"Force full data"
               },
               {
-                "@name":"TurnOff",
+                "@name":"SkipData",
                 "@type":"boolean",
                 "@required":"false",
                 "description":"Skip the extraction process"
@@ -240,19 +240,19 @@
           "@supports-site-context":"true",
           "@supports-organization-context":"false",
           "module": "plugin_cdp_export_jobsteps/cartridge/scripts/steps/OrdersToCsv.js",
-          "description": "Get delta order list in csv file based on the last modified",
+          "description": "Get ForceFullData order list in csv file based on the last modified",
           "function": "execute",
           "timeout-in-seconds":"900",
           "parameters": {
             "parameter": [
               {
-                "@name":"Delta",
+                "@name":"ForceFullData",
                 "@type":"boolean",
                 "@required":"false",
-                "description":"Get delta data"
+                "description":"Force full data"
               },
               {
-                "@name":"TurnOff",
+                "@name":"SkipData",
                 "@type":"boolean",
                 "@required":"false",
                 "description":"Skip the extraction process"
@@ -277,7 +277,7 @@
           "@supports-site-context":"true",
           "@supports-organization-context":"false",
           "module": "plugin_cdp_export_jobsteps/cartridge/scripts/steps/CustomObjectToCsv.js",
-          "description": "Get delta data from custom object to a csv file",
+          "description": "Get ForceFullData data from custom object to a csv file",
           "function": "execute",
           "timeout-in-seconds":"900",
           "parameters": {
@@ -289,13 +289,13 @@
                 "description":"Custom object name"
               },
               {
-                "@name":"Delta",
+                "@name":"ForceFullData",
                 "@type":"boolean",
                 "@required":"false",
-                "description":"Get delta data"
+                "description":"Force full data"
               },
               {
-                "@name":"TurnOff",
+                "@name":"SkipData",
                 "@type":"boolean",
                 "@required":"false",
                 "description":"Skip the extraction process"
@@ -320,19 +320,19 @@
           "@supports-site-context":"true",
           "@supports-organization-context":"false",
           "module": "plugin_cdp_export_jobsteps/cartridge/scripts/steps/BackInStockToCsv.js",
-          "description": "Get delta data to back in stock object (custom to Tramontina)",
+          "description": "Get ForceFullData data to back in stock object (custom to Tramontina)",
           "function": "execute",
           "timeout-in-seconds":"900",
           "parameters": {
             "parameter": [
               {
-                "@name":"Delta",
+                "@name":"ForceFullData",
                 "@type":"boolean",
                 "@required":"false",
-                "description":"Get delta data"
+                "description":"Force full data"
               },
               {
-                "@name":"TurnOff",
+                "@name":"SkipData",
                 "@type":"boolean",
                 "@required":"false",
                 "description":"Skip the extraction process"

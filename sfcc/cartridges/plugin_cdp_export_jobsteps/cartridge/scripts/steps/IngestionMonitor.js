@@ -10,7 +10,7 @@ const JOB_STATUS_FAILED = 'Failed';
 
 function execute(params, stepExecution) {
     try {
-        if(params.TurnOff) return new Status(Status.OK);
+        if(params.SkipData) return new Status(Status.OK);
         monitoring(params);
     } catch (error) {
         Logger.error(error.stack);

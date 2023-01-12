@@ -8,7 +8,7 @@ const CsvFile = require('../file/CsvFile');
 
 function execute(params, stepExecution) {
     try {
-        if(params.TurnOff) return new Status(Status.OK);
+        if(params.SkipData) return new Status(Status.OK);
         createOutputFile(params);
     } catch (error) {
         Logger.error(error.stack);
