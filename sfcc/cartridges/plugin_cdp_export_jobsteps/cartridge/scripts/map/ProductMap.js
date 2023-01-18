@@ -11,3 +11,19 @@ exports.priceModelFields = [
     "minPrice",
     "minPricePerUnit"
 ];
+
+exports.inventoryFields = [
+    "UUID",
+    "productID",
+    "allocation",
+    "ATS",
+    "backorderable",
+    "onOrder",
+    "perpetual",
+    "preorderable",
+    "preorderBackorderAllocation",
+    "reserved",
+    "stockLevel",
+    "turnover",
+    "lastModified"
+];
