@@ -31,6 +31,10 @@ function createOutputFile(params) {
     csvPriceModel.addRowFromList(ProductMap.priceModelFields);
     csvInventory.addRowFromList(ProductMap.inventoryFields);
 
+    var ilist = params.OCIInventoryName
+        ? ProductInventoryMgr.getInventoryList(params.OCIInventoryName)
+        : null;
+
     var psm = new ProductSearchModel();
     psm.setCategoryID('root');
     psm.search();
@@ -57,8 +61,6 @@ function createOutputFile(params) {
         }
 
         //inventory
-        if(!params.OCIInventoryName) continue;
-        var ilist = ProductInventoryMgr.getInventoryList(params.OCIInventoryName);
         if(!ilist) continue;
         var irecord = ilist.getRecord(product);
         if(!irecord) continue;
